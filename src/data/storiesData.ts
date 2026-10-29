@@ -1,0 +1,112 @@
+import type { SuccessStory, VideoTestimonial } from '../types';
+
+export const SUCCESS_STORIES: SuccessStory[] = [
+  {
+    id: 'story-1',
+    name: 'Karthik Raja',
+    studentInitials: 'K. R.',
+    avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=256&h=256&q=80',
+    background: 'Former QA Automation Engineer',
+    targetRole: 'DevOps & Platform Engineer',
+    courseCompleted: 'DevOps Engineering',
+    courseSlug: 'devops-engineering',
+    accentColor: 'blue',
+    coreAchievement: 'Orchestrating production Kubernetes clusters on AWS with declarative GitOps pipelines.',
+    summary:
+      'Mastered Kubernetes cluster provisioning, Helm charts, and GitOps on AWS EKS. The guided hands-on labs gave me the exact depth required to manage real production workloads.',
+    projectCompleted: 'Automated GitOps Microservices Pipeline on AWS EKS',
+    keySkillsGained: ['Kubernetes & Helm', 'Terraform IaC', 'GitHub Actions', 'Prometheus & Grafana'],
+    capstoneSpecs: ['AWS EKS v1.30', 'Terraform IaC', 'GitOps CI/CD'],
+    isProvisionalPlaceholder: true,
+  },
+  {
+    id: 'story-2',
+    name: 'Arun Prakash',
+    studentInitials: 'A. P.',
+    avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=256&h=256&q=80',
+    background: 'Computer Science Graduate',
+    targetRole: 'Cloud Solutions Architect',
+    courseCompleted: 'AWS & Cloud Computing',
+    courseSlug: 'aws-cloud-computing',
+    accentColor: 'green',
+    coreAchievement: 'Architected multi-tier fault-tolerant cloud topology with automated ALB failover and multi-AZ RDS.',
+    summary:
+      'Architected high-availability VPC topologies with auto-scaling compute groups and multi-AZ RDS. Building real AWS infrastructure was an absolute game changer.',
+    projectCompleted: 'Enterprise High-Availability Multi-Tier Web Architecture',
+    keySkillsGained: ['AWS VPC Architecture', 'Auto Scaling & ALB', 'IAM Security Policies', 'Amazon RDS Multi-AZ'],
+    capstoneSpecs: ['Dual-AZ VPC', 'Auto-Scaling EC2', 'Multi-AZ RDS'],
+    isProvisionalPlaceholder: true,
+  },
+  {
+    id: 'story-3',
+    name: 'Sneha Venkatesh',
+    studentInitials: 'S. V.',
+    avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=256&h=256&q=80',
+    background: 'Backend Python Developer',
+    targetRole: 'Agentic AI Systems Engineer',
+    courseCompleted: 'Agentic AI & AI Automation',
+    courseSlug: 'agentic-ai-automation',
+    accentColor: 'teal',
+    coreAchievement: 'Engineered autonomous multi-agent code audit workflows with LangGraph cyclic graphs and ChromaDB RAG.',
+    summary:
+      'Moved from simple API calls to building stateful multi-agent workflows with LangGraph and ChromaDB. Deploying deterministic tool-calling agents in production was incredible.',
+    projectCompleted: 'Autonomous Code-Review Multi-Agent Workflow',
+    keySkillsGained: ['LangGraph & CrewAI', 'Vector Embeddings & RAG', 'Tool Calling Protocols', 'FastAPI Streaming'],
+    capstoneSpecs: ['LangGraph Graphs', 'ChromaDB Hybrid RAG', 'FastAPI SSE'],
+    isProvisionalPlaceholder: true,
+  },
+  {
+    id: 'story-4',
+    name: 'Pooja Nandakumar',
+    studentInitials: 'P. N.',
+    avatarUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=256&h=256&q=80',
+    background: 'Former Systems Administrator',
+    targetRole: 'Site Reliability Engineer (SRE)',
+    courseCompleted: 'DevOps Engineering',
+    courseSlug: 'devops-engineering',
+    accentColor: 'rose',
+    coreAchievement: 'Automated infrastructure deployments with Terraform and established centralized Prometheus & Loki observability.',
+    summary:
+      'Standardized multi-environment infrastructure on AWS with Terraform and built automated Prometheus alerting dashboards for microservices.',
+    projectCompleted: 'Cloud Infrastructure & Distributed Telemetry Stack',
+    keySkillsGained: ['Terraform IaC', 'Docker & Compose', 'Prometheus & Grafana', 'AWS Systems Manager'],
+    capstoneSpecs: ['Terraform IaC', 'Prometheus Metrics', 'Loki Aggregation'],
+    isProvisionalPlaceholder: true,
+  },
+];
+
+export const VIDEO_TESTIMONIALS: VideoTestimonial[] = [
+  {
+    id: 'video-1',
+    studentNameOrCode: 'DevOps Graduate Spotlight',
+    courseTitle: 'DevOps Engineering Program',
+    batchOrYear: 'Practical Lab Batch 2026',
+    duration: '3:45',
+    thumbnailUrl: '',
+    transcriptSnippet:
+      '"The practical lab exercises were game changers. Instead of watching lectures, we spent our evenings provisioning actual Kubernetes clusters, debugging ingress routes, and writing Terraform code."',
+    isPlaceholder: true,
+  },
+  {
+    id: 'video-2',
+    studentNameOrCode: 'Cloud Architect Journey',
+    courseTitle: 'AWS & Cloud Computing',
+    batchOrYear: 'Cloud Systems Cohort 2026',
+    duration: '4:12',
+    thumbnailUrl: '',
+    transcriptSnippet:
+      '"The focus on real AWS architectures gave me genuine confidence. Designing VPC subnets and multi-AZ database configurations directly in the AWS console prepared me for real engineering interviews."',
+    isPlaceholder: true,
+  },
+  {
+    id: 'video-3',
+    studentNameOrCode: 'Agentic AI Lab Alum',
+    courseTitle: 'Agentic AI & AI Automation',
+    batchOrYear: 'AI Cohort 2026',
+    duration: '2:58',
+    thumbnailUrl: '',
+    transcriptSnippet:
+      '"Building autonomous multi-agent workflows with LangGraph and ChromaDB set this apart from superficial ChatGPT prompt courses. You actually write production Python services and evaluate deterministic outputs."',
+    isPlaceholder: true,
+  },
+];
