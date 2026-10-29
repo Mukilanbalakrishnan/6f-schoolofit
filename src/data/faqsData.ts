@@ -13,7 +13,7 @@ export const GLOBAL_FAQS: FAQItem[] = [
     category: 'Prerequisites',
     question: 'Do I need prior experience or an engineering degree to enrol?',
     answer:
-      'Our programs start with foundational concepts and assume basic computer literacy and problem-solving aptitude. Advanced programs like Agentic AI or DevOps build upon fundamentals with guided hands-on exercises in real environments.',
+      'Our programs start with foundational concepts and assume basic computer literacy and problem-solving aptitude. Advanced programs like AI-Powered AWS DevOps, Azure DevOps, or AIOps build upon fundamentals with guided hands-on exercises in real environments.',
   },
   {
     id: 'faq-3',

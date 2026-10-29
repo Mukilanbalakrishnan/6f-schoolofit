@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
 import { useEnquiry } from '../context/EnquiryContext';
 import { COURSES } from '../data/coursesData';
-import { TECHNOLOGIES } from '../data/technologiesData';
 import { STUDENT_PROJECTS } from '../data/projectsData';
 import { SUCCESS_STORIES, VIDEO_TESTIMONIALS } from '../data/storiesData';
 import { GLOBAL_FAQS } from '../data/faqsData';
-import type { VideoTestimonial, Course } from '../types';
+import type { VideoTestimonial, Course, SuccessStory, StudentProject } from '../types';
 import { CourseCard } from '../components/courses/CourseCard';
 import { SyllabusModal } from '../components/courses/SyllabusModal';
 import { EnquiryForm } from '../components/enquiry/EnquiryForm';
+import { TechnologyCarousel } from '../components/technologies/TechnologyCarousel';
+import { FlightPathJourney } from '../components/home/FlightPathJourney';
+import { WhyChooseUsRoadmap } from '../components/home/WhyChooseUsRoadmap';
+import { ProjectCard } from '../components/projects/ProjectCard';
+import { ProjectDetailModal } from '../components/projects/ProjectDetailModal';
 import heroBg from '../assets/hero-bg.jpg';
 import {
   ArrowRight,
@@ -16,10 +20,6 @@ import {
   Play,
   X,
   Layers,
-  Terminal,
-  Shield,
-  Users,
-  Briefcase,
   FolderGit2,
   Sparkles,
   CheckCircle2,
@@ -31,31 +31,40 @@ import {
   Clock,
   ChevronDown,
   HelpCircle,
-  ExternalLink,
   Award,
   Star,
   Cloud,
   GitMerge,
   Bot,
+  MessageCircle,
+  CheckCheck,
+  ZoomIn,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 export const HomePage: React.FC = () => {
   const { openEnquiryModal } = useEnquiry();
 
-  // Tech showcase category filter state
-  const techCategories = ['All', 'Cloud', 'DevOps', 'Programming', 'Frontend', 'Backend', 'Artificial Intelligence'];
-  const [selectedTechCategory, setSelectedTechCategory] = useState('All');
-
   // Student projects filter state
-  const projectCategories = ['All', 'Cloud Infrastructure', 'DevOps & GitOps', 'Agentic AI'];
+  const projectCategories = [
+    'All',
+    'AI-Powered AWS DevOps',
+    'AI-Powered Azure DevOps',
+    'AI-Powered AIOps (Artificial Intelligence for IT Operations)',
+  ];
   const [selectedProjectCategory, setSelectedProjectCategory] = useState('All');
 
   // Video modal state
   const [activeVideo, setActiveVideo] = useState<VideoTestimonial | null>(null);
 
+  // Active WhatsApp Screenshot Lightbox Modal
+  const [activeScreenshot, setActiveScreenshot] = useState<SuccessStory | null>(null);
+
   // In-page Syllabus modal state
   const [selectedSyllabus, setSelectedSyllabus] = useState<Course | null>(null);
+
+  // Active Project Detail Modal state
+  const [selectedProject, setSelectedProject] = useState<StudentProject | null>(null);
 
   // FAQ open item state for Contact section
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
@@ -76,85 +85,11 @@ export const HomePage: React.FC = () => {
     }
   };
 
-  const filteredTechnologies =
-    selectedTechCategory === 'All'
-      ? TECHNOLOGIES.slice(0, 8)
-      : TECHNOLOGIES.filter((t) => t.category === selectedTechCategory);
 
   const filteredProjects =
     selectedProjectCategory === 'All'
       ? STUDENT_PROJECTS
       : STUDENT_PROJECTS.filter((p) => p.category === selectedProjectCategory);
-
-  // Concise Learning journey steps
-  const journeySteps = [
-    { number: '01', title: 'Explore Technologies', desc: 'Map your curriculum track to real engineering roles.' },
-    { number: '02', title: 'Core Fundamentals', desc: 'Master Linux, networking, and programming fundamentals.' },
-    { number: '03', title: 'Guided Cloud Labs', desc: 'Execute live AWS, Docker, and Kubernetes workloads.' },
-    { number: '04', title: 'Production Capstone', desc: 'Deploy resilient multi-tier microservices and RAG pipelines.' },
-    { number: '05', title: 'Portfolio Verification', desc: 'Publish clean GitHub repositories with live demo URLs.' },
-    { number: '06', title: 'Interview Preparation', desc: 'Review architectural tradeoffs and live technical challenges.' },
-  ];
-
-  // Concise strengths
-  const institutionalStrengths = [
-    {
-      icon: Terminal,
-      title: 'Lab-First Practice',
-      desc: 'No passive slide decks. Every concept is directly executed in authentic CLI, cloud, and container runtimes.',
-      color: 'from-blue-500/10 to-indigo-500/10',
-    },
-    {
-      icon: Layers,
-      title: 'Modern Toolchains',
-      desc: 'Industry tools: AWS, Docker, Kubernetes, Terraform, LangGraph, TypeScript, and React.',
-      color: 'from-sky-500/10 to-blue-500/10',
-    },
-    {
-      icon: FolderGit2,
-      title: 'Production Capstones',
-      desc: 'Build and deploy verified systems: automated GitOps pipelines, RAG agents, and cloud backends.',
-      color: 'from-emerald-500/10 to-teal-500/10',
-    },
-    {
-      icon: Users,
-      title: 'Active Mentorship',
-      desc: 'Direct code reviews, architectural feedback, and live troubleshooting from practicing engineers.',
-      color: 'from-violet-500/10 to-purple-500/10',
-    },
-    {
-      icon: Briefcase,
-      title: 'Portfolio & System Design',
-      desc: 'Translate practical lab work into verified public GitHub portfolios and articulate system tradeoffs in interviews.',
-      color: 'from-amber-500/10 to-orange-500/10',
-    },
-    {
-      icon: Shield,
-      title: 'Continuous Support',
-      desc: 'Interactive lab debugging support, community code collaboration, and ongoing review sessions.',
-      color: 'from-cyan-500/10 to-blue-500/10',
-    },
-  ];
-
-  // About pillars
-  const aboutPillars = [
-    {
-      title: '100% Lab Execution',
-      desc: 'Every lecture is paired with cloud consoles, shell scripts, and reproducible configurations.',
-    },
-    {
-      title: 'Zero Artificial Hype',
-      desc: 'Honest, skill-focused engineering education without exaggerated promises or invented metrics.',
-    },
-    {
-      title: 'Modern Enterprise Stacks',
-      desc: 'Master the actual toolchains powering top tech companies: AWS, Kubernetes, Terraform, LangGraph.',
-    },
-    {
-      title: 'Direct Code & Arch Reviews',
-      desc: 'Receive pull-request feedback and architecture design critiques from seasoned engineers.',
-    },
-  ];
 
   return (
     <div className="w-full bg-white text-[#151922] overflow-x-hidden">
@@ -247,7 +182,7 @@ export const HomePage: React.FC = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="mt-5 text-base sm:text-lg lg:text-xl text-[#626B78] leading-relaxed max-w-2xl mx-auto font-normal"
           >
-            Explore AWS, DevOps, and Agentic AI through structured guided labs, verified architectural code reviews, and production capstone deployments.
+            Explore AI-Powered AWS DevOps, Azure DevOps, and AIOps through structured guided labs, verified architectural code reviews, and production capstone deployments.
           </motion.p>
 
           {/* Primary Action Buttons */}
@@ -297,11 +232,11 @@ export const HomePage: React.FC = () => {
             transition={{ duration: 0.6, delay: 0.45 }}
             className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-5 text-left"
           >
-            {/* Track 1: AWS & Cloud */}
+            {/* Track 1: AI-Powered AWS DevOps */}
             <motion.div
               whileHover={{ y: -6, transition: { duration: 0.2 } }}
               onClick={() => {
-                const c = COURSES.find((item) => item.slug === 'aws-cloud-computing');
+                const c = COURSES.find((item) => item.slug === 'ai-powered-aws-devops');
                 if (c) setSelectedSyllabus(c);
               }}
               className="group relative rounded-3xl border border-[#E5E9F0] bg-white/90 backdrop-blur-sm p-6 shadow-sm hover:border-[#2563EB]/40 hover:shadow-xl hover:shadow-blue-500/5 transition-all cursor-pointer overflow-hidden"
@@ -316,10 +251,10 @@ export const HomePage: React.FC = () => {
                 </span>
               </div>
               <h3 className="text-base font-bold text-[#151922] group-hover:text-[#2563EB] transition-colors">
-                AWS & Cloud Computing
+                AI-Powered AWS DevOps
               </h3>
               <p className="mt-1.5 text-xs text-[#626B78] leading-relaxed">
-                Multi-AZ VPCs, ALB path routing, Auto Scaling EC2, and resilient Multi-AZ RDS persistence.
+                AWS architecture, Amazon Q Developer, Kubernetes EKS, Terraform IaC, and automated GitHub Actions.
               </p>
               <div className="mt-4 pt-3 border-t border-[#E5E9F0] flex items-center justify-between text-[11px] font-bold text-[#2563EB]">
                 <span>Inspect Syllabus Outline</span>
@@ -327,11 +262,11 @@ export const HomePage: React.FC = () => {
               </div>
             </motion.div>
 
-            {/* Track 2: DevOps Engineering */}
+            {/* Track 2: AI-Powered Azure DevOps */}
             <motion.div
               whileHover={{ y: -6, transition: { duration: 0.2 } }}
               onClick={() => {
-                const c = COURSES.find((item) => item.slug === 'devops-engineering');
+                const c = COURSES.find((item) => item.slug === 'ai-powered-azure-devops');
                 if (c) setSelectedSyllabus(c);
               }}
               className="group relative rounded-3xl border border-[#E5E9F0] bg-white/90 backdrop-blur-sm p-6 shadow-sm hover:border-emerald-500/40 hover:shadow-xl hover:shadow-emerald-500/5 transition-all cursor-pointer overflow-hidden"
@@ -346,10 +281,10 @@ export const HomePage: React.FC = () => {
                 </span>
               </div>
               <h3 className="text-base font-bold text-[#151922] group-hover:text-emerald-600 transition-colors">
-                DevOps & GitOps
+                AI-Powered Azure DevOps
               </h3>
               <p className="mt-1.5 text-xs text-[#626B78] leading-relaxed">
-                Kubernetes cluster rollouts, Helm charts, Terraform IaC, and automated GitHub Actions pipelines.
+                Azure VNets & AKS, GitHub Copilot integration, multi-stage Azure Pipelines, and Terraform/Bicep IaC.
               </p>
               <div className="mt-4 pt-3 border-t border-[#E5E9F0] flex items-center justify-between text-[11px] font-bold text-emerald-600">
                 <span>Inspect Syllabus Outline</span>
@@ -357,11 +292,11 @@ export const HomePage: React.FC = () => {
               </div>
             </motion.div>
 
-            {/* Track 3: Agentic AI */}
+            {/* Track 3: AI-Powered AIOps (Artificial Intelligence for IT Operations) */}
             <motion.div
               whileHover={{ y: -6, transition: { duration: 0.2 } }}
               onClick={() => {
-                const c = COURSES.find((item) => item.slug === 'agentic-ai-automation');
+                const c = COURSES.find((item) => item.slug === 'ai-powered-aiops');
                 if (c) setSelectedSyllabus(c);
               }}
               className="group relative rounded-3xl border border-[#E5E9F0] bg-white/90 backdrop-blur-sm p-6 shadow-sm hover:border-indigo-500/40 hover:shadow-xl hover:shadow-indigo-500/5 transition-all cursor-pointer overflow-hidden"
@@ -376,10 +311,10 @@ export const HomePage: React.FC = () => {
                 </span>
               </div>
               <h3 className="text-base font-bold text-[#151922] group-hover:text-indigo-600 transition-colors">
-                Agentic AI & Automation
+                AI-Powered AIOps (Artificial Intelligence for IT Operations)
               </h3>
               <p className="mt-1.5 text-xs text-[#626B78] leading-relaxed">
-                Stateful LangGraph multi-agent supervisors, ChromaDB vector RAG, and deterministic tool-calling.
+                OpenTelemetry pipelines, ML metric anomaly detection, LangGraph triage agents, and self-healing systems.
               </p>
               <div className="mt-4 pt-3 border-t border-[#E5E9F0] flex items-center justify-between text-[11px] font-bold text-indigo-600">
                 <span>Inspect Syllabus Outline</span>
@@ -388,25 +323,7 @@ export const HomePage: React.FC = () => {
             </motion.div>
           </motion.div>
 
-          {/* Technology Marquee / Trust Badge Row */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.55 }}
-            className="mt-10 pt-6 border-t border-[#E5E9F0]/80 flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-xs text-[#626B78]"
-          >
-            <span className="font-mono text-[10px] uppercase tracking-wider text-[#626B78] mr-2">
-              Enterprise Toolchains:
-            </span>
-            {['AWS Console', 'Docker', 'Kubernetes', 'Terraform', 'Helm', 'LangGraph', 'Python', 'Prometheus', 'Grafana', 'GitHub Actions'].map((tech) => (
-              <span
-                key={tech}
-                className="rounded-lg border border-[#E5E9F0] bg-white px-2.5 py-1 text-[11px] font-semibold text-[#151922] shadow-2xs hover:border-[#2563EB]/40 hover:text-[#2563EB] transition-colors"
-              >
-                {tech}
-              </span>
-            ))}
-          </motion.div>
+
         </div>
       </section>
 
@@ -488,202 +405,66 @@ export const HomePage: React.FC = () => {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-left">
-            {institutionalStrengths.map((item, idx) => {
-              const Icon = item.icon;
-              return (
-                <motion.div
-                  key={idx}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-30px' }}
-                  transition={{ duration: 0.4, delay: idx * 0.06 }}
-                  whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                  className="group relative rounded-2xl border border-[#E5E9F0] bg-white p-6 shadow-2xs hover:border-[#2563EB]/40 hover:shadow-lg hover:shadow-blue-500/5 transition-all overflow-hidden"
-                >
-                  <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-blue-500/5 to-transparent rounded-bl-3xl pointer-events-none" />
-
-                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#F7F9FC] border border-[#E5E9F0] text-[#2563EB] mb-4 group-hover:bg-[#2563EB] group-hover:text-white group-hover:border-[#2563EB] transition-colors duration-200">
-                    <Icon className="h-5 w-5" />
-                  </div>
-                  <h3 className="text-base font-bold text-[#151922] group-hover:text-[#2563EB] transition-colors">
-                    {item.title}
-                  </h3>
-                  <p className="mt-2 text-xs sm:text-sm text-[#626B78] leading-relaxed">
-                    {item.desc}
-                  </p>
-                </motion.div>
-              );
-            })}
-          </div>
+          {/* 6-Stage Engineering Progression Roadmap */}
+          <WhyChooseUsRoadmap />
         </div>
       </section>
 
       {/* =========================================================================
-          4. LEARNING JOURNEY (#journey)
+          4. LEARNING JOURNEY (#journey) - Flight Path Roadmap Matching Reference
          ========================================================================= */}
-      <section id="journey" className="relative border-b border-[#E5E9F0] bg-[#F7F9FC] py-16 lg:py-24 overflow-hidden">
+      <section id="journey" className="relative border-b border-[#E5E9F0] bg-white py-16 lg:py-24 overflow-hidden">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.5 }}
-            className="text-left max-w-2xl mb-14"
+            className="text-left max-w-3xl mb-10"
           >
-            <div className="inline-flex items-center gap-1.5 rounded-full bg-[#2563EB]/10 px-3 py-0.5 text-xs font-bold text-[#2563EB] mb-2">
+            <div className="inline-flex items-center gap-1.5 rounded-full bg-[#2563EB]/10 px-3.5 py-1 text-xs font-bold text-[#2563EB] mb-2.5">
               <Compass className="h-3.5 w-3.5" />
-              <span>Structured Path</span>
+              <span>HOW WE TEACH</span>
             </div>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-[#151922]">
-              Your 6-Step Learning Journey
+              A Structured Path from Learning to Application
             </h2>
-            <p className="mt-2 text-sm sm:text-base text-[#626B78]">
-              A step-by-step roadmap designed to take you from foundational understanding to verifiable engineering competency.
+            <p className="mt-2 text-sm sm:text-base text-[#626B78] leading-relaxed">
+              We focus on developing both technical capability and the confidence to apply skills in practical scenarios.
             </p>
           </motion.div>
 
-          {/* Desktop Timeline */}
-          <div className="hidden lg:grid grid-cols-6 gap-4 relative">
-            {/* Connecting progress line */}
-            <div className="absolute top-7 left-8 right-8 h-0.5 bg-gradient-to-r from-[#2563EB]/20 via-[#2563EB]/40 to-[#2563EB]/20 -z-0" />
-
-            {journeySteps.map((step, idx) => (
-              <motion.div
-                key={step.number}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-30px' }}
-                transition={{ duration: 0.4, delay: idx * 0.08 }}
-                className="relative z-10 text-left flex flex-col items-start"
-              >
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white border-2 border-[#2563EB] text-[#2563EB] font-bold text-sm shadow-md mb-4 group-hover:scale-105 transition-transform">
-                  {step.number}
-                </div>
-                <h3 className="text-xs font-bold text-[#151922] leading-snug">
-                  {step.title}
-                </h3>
-                <p className="mt-1.5 text-[11px] text-[#626B78] leading-relaxed">
-                  {step.desc}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Mobile Vertical Timeline */}
-          <div className="lg:hidden space-y-4 text-left">
-            {journeySteps.map((step, idx) => (
-              <motion.div
-                key={step.number}
-                initial={{ opacity: 0, x: -16 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.35, delay: idx * 0.05 }}
-                className="flex items-start gap-4 rounded-2xl border border-[#E5E9F0] bg-white p-4 shadow-2xs"
-              >
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#2563EB] text-white font-bold text-xs shadow-xs">
-                  {step.number}
-                </div>
-                <div>
-                  <h3 className="text-sm font-bold text-[#151922]">{step.title}</h3>
-                  <p className="mt-1 text-xs text-[#626B78] leading-relaxed">{step.desc}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+          {/* Interactive Curved Flight Path Roadmap with 6F Methodology */}
+          <FlightPathJourney />
         </div>
       </section>
 
       {/* =========================================================================
-          5. TECHNOLOGY SHOWCASE (#technologies)
+          5. TECHNOLOGY SHOWCASE (#technologies) - Exact Carousel Matching Reference
          ========================================================================= */}
-      <section id="technologies" className="relative border-b border-[#E5E9F0] bg-white py-16 lg:py-24">
+      <section id="technologies" className="relative border-b border-[#E5E9F0] bg-white py-16 lg:py-24 overflow-hidden">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.5 }}
-            className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10 text-left"
+            className="text-center max-w-2xl mx-auto mb-10"
           >
-            <div>
-              <div className="inline-flex items-center gap-1.5 rounded-full bg-[#2563EB]/10 px-3 py-0.5 text-xs font-bold text-[#2563EB] mb-2">
-                <Cpu className="h-3.5 w-3.5" />
-                <span>Enterprise Tooling</span>
-              </div>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-[#151922]">
-                Technology Stack Showcase
-              </h2>
-              <p className="mt-2 text-sm sm:text-base text-[#626B78] max-w-xl">
-                Industry-standard tools, container runtimes, orchestration engines, and AI frameworks taught in our labs.
-              </p>
+            <div className="inline-flex items-center gap-1.5 rounded-full bg-[#2563EB]/10 px-3.5 py-1 text-xs font-bold text-[#2563EB] mb-3">
+              <Cpu className="h-3.5 w-3.5" />
+              <span>Technology Stack Showcase</span>
             </div>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#151922]">
+              Technologies Used in Our Programs
+            </h2>
+            <p className="mt-3 text-sm sm:text-base text-[#626B78] leading-relaxed max-w-xl mx-auto">
+              Master the exact industry-standard cloud platforms, container runtimes, and AI DevOps toolchains taught across our 3 flagship courses.
+            </p>
           </motion.div>
 
-          {/* Category Filter Pills */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-8">
-            {techCategories.map((cat) => (
-              <motion.button
-                key={cat}
-                whileHover={{ scale: 1.04 }}
-                whileTap={{ scale: 0.96 }}
-                type="button"
-                onClick={() => setSelectedTechCategory(cat)}
-                className={`rounded-full px-4 py-1.5 text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
-                  selectedTechCategory === cat
-                    ? 'bg-[#151922] text-white shadow-xs'
-                    : 'bg-[#F7F9FC] text-[#626B78] hover:bg-[#E5E9F0]/80 hover:text-[#151922] border border-[#E5E9F0]'
-                }`}
-              >
-                {cat}
-              </motion.button>
-            ))}
-          </div>
-
-          {/* Filtered Grid */}
-          <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 text-left">
-            <AnimatePresence>
-              {filteredTechnologies.map((tech) => (
-                <motion.div
-                  key={tech.id}
-                  layout
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.25 }}
-                  whileHover={{ y: -4, transition: { duration: 0.15 } }}
-                  className="rounded-2xl border border-[#E5E9F0] bg-white p-5 shadow-2xs hover:border-[#2563EB]/40 hover:shadow-md transition-all flex flex-col justify-between"
-                >
-                  <div>
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="rounded-md bg-[#2563EB]/10 px-2 py-0.5 text-[10px] font-bold text-[#2563EB]">
-                        {tech.category}
-                      </span>
-                      <span className="text-[10px] font-mono font-semibold text-[#626B78] bg-[#F7F9FC] border border-[#E5E9F0] px-2 py-0.5 rounded">
-                        Lab Verified
-                      </span>
-                    </div>
-                    <h3 className="text-base font-bold text-[#151922]">{tech.name}</h3>
-                    <p className="mt-1.5 text-xs text-[#626B78] leading-relaxed line-clamp-2">
-                      {tech.description}
-                    </p>
-                  </div>
-
-                  <div className="mt-4 pt-3 border-t border-[#E5E9F0] flex items-center justify-between">
-                    <span className="text-[10px] text-[#626B78] font-medium">Included In Curriculum</span>
-                    <button
-                      type="button"
-                      onClick={() => scrollTo('courses')}
-                      className="text-xs font-bold text-[#2563EB] hover:text-[#1D4ED8] flex items-center gap-1 cursor-pointer"
-                    >
-                      <span>Explore</span>
-                      <ArrowRight className="h-3 w-3" />
-                    </button>
-                  </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </motion.div>
+          {/* Interactive Technology Carousel with 3D Reflection */}
+          <TechnologyCarousel />
         </div>
       </section>
 
@@ -733,7 +514,7 @@ export const HomePage: React.FC = () => {
             ))}
           </div>
 
-          {/* Projects Grid */}
+          {/* Projects Grid - Streamlined, Attractive Cards with Quick Inspect */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
             {filteredProjects.map((project, idx) => (
               <motion.div
@@ -741,67 +522,12 @@ export const HomePage: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-40px' }}
-                transition={{ duration: 0.45, delay: idx * 0.1 }}
-                whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                className="rounded-3xl border border-[#E5E9F0] bg-white p-7 shadow-2xs hover:border-[#2563EB]/40 hover:shadow-lg hover:shadow-blue-500/5 transition-all flex flex-col justify-between"
+                transition={{ duration: 0.45, delay: idx * 0.08 }}
               >
-                <div>
-                  <div className="flex items-center justify-between pb-3.5 border-b border-[#E5E9F0] mb-3.5">
-                    <span className="rounded-full bg-[#2563EB]/10 px-3 py-1 text-xs font-bold text-[#2563EB]">
-                      {project.category}
-                    </span>
-                    <span className="rounded-full bg-[#F7F9FC] border border-[#E5E9F0] px-2.5 py-0.5 text-[10px] font-mono text-[#626B78]">
-                      Production Grade
-                    </span>
-                  </div>
-
-                  <h3 className="text-lg font-bold text-[#151922] leading-snug">
-                    {project.title}
-                  </h3>
-
-                  <p className="mt-2 text-xs sm:text-sm text-[#626B78] leading-relaxed">
-                    {project.description}
-                  </p>
-
-                  <div className="mt-4 rounded-xl border border-[#E5E9F0] bg-[#F7F9FC] p-3 text-xs">
-                    <span className="font-bold text-[#151922] block mb-1">Architecture Summary:</span>
-                    <p className="text-[#626B78] text-[11px] leading-relaxed">{project.architectureSummary}</p>
-                  </div>
-
-                  {/* Tech stack */}
-                  <div className="mt-4 flex flex-wrap gap-1.5">
-                    {project.technologies.map((t) => (
-                      <span
-                        key={t}
-                        className="rounded-md border border-[#E5E9F0] bg-white px-2 py-0.5 text-[10px] font-semibold text-[#151922]"
-                      >
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="mt-6 pt-4 border-t border-[#E5E9F0] flex items-center justify-between">
-                  <span className="text-[11px] text-[#626B78] font-medium">Public Capstone Codebase</span>
-                  <div className="flex items-center gap-3">
-                    <a
-                      href={project.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-xs font-bold text-[#626B78] hover:text-[#151922] transition-colors"
-                    >
-                      <span>Repository</span>
-                      <ExternalLink className="h-3 w-3" />
-                    </a>
-                    <button
-                      type="button"
-                      onClick={() => openEnquiryModal()}
-                      className="rounded-lg bg-[#2563EB] px-3 py-1.5 text-xs font-bold text-white hover:bg-[#1D4ED8] transition-colors cursor-pointer"
-                    >
-                      Enquire Track
-                    </button>
-                  </div>
-                </div>
+                <ProjectCard
+                  project={project}
+                  onInspect={(p) => setSelectedProject(p)}
+                />
               </motion.div>
             ))}
           </div>
@@ -904,54 +630,123 @@ export const HomePage: React.FC = () => {
                     className={`absolute inset-0 ${bgClass} shadow-lg opacity-95 transition-all pointer-events-none`}
                   />
 
-                  {/* Front White Card (Smaller, Crisp, Balanced) */}
-                  <div className="relative z-10 w-full rounded-[24px] sm:rounded-[26px] bg-white p-5 sm:p-6 pt-13 sm:pt-14 text-center shadow-xl shadow-slate-200/80 border border-slate-100 flex flex-col items-center justify-between min-h-[355px] sm:min-h-[365px]">
-                    {/* Floating Avatar at Top */}
-                    <div className="absolute -top-10 left-1/2 -translate-x-1/2 z-20">
-                      <div className="h-20 w-20 rounded-full border-4 border-white shadow-xl overflow-hidden bg-slate-100 group-hover:scale-105 transition-transform duration-300">
-                        <img
-                          src={story.avatarUrl}
-                          alt={story.name || story.studentInitials}
-                          className="h-full w-full object-cover"
-                          loading="lazy"
-                        />
+                  {/* Front White Card - Dedicated WhatsApp Screenshot Showcase */}
+                  <div className="relative z-10 w-full rounded-[24px] sm:rounded-[26px] bg-white p-4.5 sm:p-5 text-left shadow-xl shadow-slate-200/80 border border-slate-100 flex flex-col justify-between min-h-[420px] sm:min-h-[430px]">
+                    <div>
+                      {/* Top Header: WhatsApp Green Badge & Student Name */}
+                      <div className="flex items-center justify-between mb-2.5">
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 border border-emerald-200/80 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700 shadow-2xs">
+                          <MessageCircle className="h-3 w-3 text-emerald-600 fill-emerald-600" />
+                          <span>WhatsApp Chat</span>
+                        </span>
+                        <span className="text-[10px] font-mono font-bold text-slate-400">
+                          {story.chatTime?.split(',')[0] || 'Verified'}
+                        </span>
+                      </div>
+
+                      <div className="mb-3">
+                        <h3 className="text-base font-extrabold text-[#151922] tracking-tight">
+                          {story.name}
+                        </h3>
+                        <p className="text-[11px] font-semibold text-emerald-700">
+                          {story.placementOffer}
+                        </p>
+                      </div>
+
+                      {/* WhatsApp Screenshot Container with Zoom on Click */}
+                      <div
+                        onClick={() => setActiveScreenshot(story)}
+                        className="group/screenshot relative w-full rounded-2xl overflow-hidden border border-slate-200/90 shadow-sm cursor-pointer transition-all duration-200 hover:border-emerald-500 hover:shadow-md"
+                      >
+                        {story.whatsappScreenshotUrl ? (
+                          <div className="relative aspect-[4/5] w-full overflow-hidden bg-slate-100">
+                            <img
+                              src={story.whatsappScreenshotUrl}
+                              alt={`WhatsApp feedback from ${story.name}`}
+                              className="h-full w-full object-cover group-hover/screenshot:scale-105 transition-transform duration-300"
+                            />
+                          </div>
+                        ) : (
+                          /* Authentic WhatsApp Chat Screenshot Mockup */
+                          <div className="relative w-full rounded-2xl overflow-hidden bg-[#ECE5DD] border border-slate-200/60 flex flex-col justify-between min-h-[210px] sm:min-h-[220px]">
+                            {/* WhatsApp Chat App Bar */}
+                            <div className="bg-[#075E54] px-3 py-2 text-white flex items-center justify-between">
+                              <div className="flex items-center gap-2">
+                                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-600 text-white font-bold text-[10px]">
+                                  {story.studentInitials}
+                                </div>
+                                <div>
+                                  <span className="text-xs font-bold text-white block leading-tight">
+                                    {story.name}
+                                  </span>
+                                  <span className="text-[9px] text-emerald-200 block leading-none">
+                                    online
+                                  </span>
+                                </div>
+                              </div>
+                              <span className="flex h-2 w-2 rounded-full bg-emerald-400" />
+                            </div>
+
+                            {/* WhatsApp Message Bubble Area */}
+                            <div className="p-3 space-y-2 flex-1 flex flex-col justify-center">
+                              {/* Date pill */}
+                              <div className="text-center">
+                                <span className="rounded-md bg-white/70 px-2 py-0.5 text-[9px] font-semibold text-slate-500 uppercase tracking-wide shadow-2xs">
+                                  Today
+                                </span>
+                              </div>
+
+                              {/* Student Incoming WhatsApp Bubble */}
+                              <div className="relative max-w-[92%] ml-auto bg-[#D9FDD3] p-2.5 rounded-xl rounded-tr-xs shadow-2xs border border-emerald-100">
+                                <p className="text-[11px] text-[#111B21] leading-relaxed font-normal">
+                                  {story.chatSnippet}
+                                </p>
+                                <div className="mt-1 flex items-center justify-end gap-1 text-[9px] text-[#667781]">
+                                  <span>{story.chatTime?.split(',')[1] || '11:42 AM'}</span>
+                                  <CheckCheck className="h-3 w-3 text-[#53BDEB]" />
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Verification Footer Bar in Screenshot */}
+                            <div className="bg-white/80 backdrop-blur-xs px-3 py-1.5 border-t border-slate-200/50 flex items-center justify-between text-[10px] text-slate-600 font-medium">
+                              <span className="flex items-center gap-1 text-emerald-700 font-bold">
+                                <CheckCircle2 className="h-3 w-3 text-emerald-600" />
+                                Verified Offer
+                              </span>
+                              <span className="text-[9px] font-mono text-slate-400">
+                                6F IT School
+                              </span>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Hover Overlay: Click to View Full Screenshot */}
+                        <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover/screenshot:opacity-100 transition-opacity duration-200 flex items-center justify-center backdrop-blur-2xs">
+                          <span className="inline-flex items-center gap-1.5 rounded-xl bg-white/95 px-3 py-1.5 text-xs font-bold text-slate-900 shadow-lg">
+                            <ZoomIn className="h-3.5 w-3.5 text-emerald-600" />
+                            <span>View Full Screenshot</span>
+                          </span>
+                        </div>
                       </div>
                     </div>
 
-                    {/* Content inside card */}
-                    <div className="flex flex-col items-center w-full">
-                      {/* Name */}
-                      <h3 className="text-base sm:text-lg font-bold tracking-tight text-[#151922] mt-1">
-                        {story.name || story.studentInitials}
-                      </h3>
+                    {/* Bottom Course Completed & Syllabus Link */}
+                    <div className="mt-3 pt-3 border-t border-[#E5E9F0]/80 w-full flex flex-col items-center gap-1.5 text-center">
+                      <span className="rounded-full bg-[#F7F9FC] border border-[#E5E9F0] px-2.5 py-0.5 text-[10px] font-bold text-[#151922] truncate max-w-full">
+                        {story.courseCompleted}
+                      </span>
 
-                      {/* Position in Italic */}
-                      <p className="text-[11px] sm:text-xs italic font-medium text-[#626B78] mt-0.5 line-clamp-1">
-                        {story.targetRole}
-                      </p>
-
-                      {/* Review Quote text */}
-                      <p className="mt-3 text-[11px] sm:text-xs text-[#626B78] leading-relaxed max-w-xs font-normal line-clamp-4 px-0.5">
-                        "{story.summary}"
-                      </p>
-
-                      {/* Capstone & Course Badge */}
-                      <div className="mt-3.5 pt-3 border-t border-[#E5E9F0]/80 w-full flex flex-col items-center gap-1.5">
-                        <span className="rounded-full bg-[#F7F9FC] border border-[#E5E9F0] px-2.5 py-0.5 text-[10px] font-bold text-[#151922] truncate max-w-full">
-                          {story.courseCompleted}
-                        </span>
-
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const course = COURSES.find((c) => c.slug === story.courseSlug);
-                            if (course) setSelectedSyllabus(course);
-                          }}
-                          className="text-[10px] sm:text-[11px] font-bold text-[#2563EB] hover:text-[#1D4ED8] transition-colors cursor-pointer"
-                        >
-                          View Syllabus &rarr;
-                        </button>
-                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const course = COURSES.find((c) => c.slug === story.courseSlug);
+                          if (course) setSelectedSyllabus(course);
+                        }}
+                        className="text-[10px] sm:text-[11px] font-bold text-[#2563EB] hover:text-[#1D4ED8] transition-colors cursor-pointer"
+                      >
+                        View Syllabus &rarr;
+                      </button>
                     </div>
 
                     {/* Bottom Floating Golden Star Badge */}
@@ -1051,7 +846,7 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* =========================================================================
-          8. ABOUT US SECTION (#about)
+          8. ABOUT US SECTION (#about) - Exact Content Matching Specification
          ========================================================================= */}
       <section id="about" className="relative border-b border-[#E5E9F0] bg-[#F7F9FC] py-16 lg:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-left">
@@ -1060,77 +855,124 @@ export const HomePage: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.5 }}
-            className="max-w-2xl mb-12"
+            className="max-w-3xl mb-12"
           >
-            <div className="inline-flex items-center gap-1.5 rounded-full bg-[#2563EB]/10 px-3 py-0.5 text-xs font-bold text-[#2563EB] mb-2">
+            <div className="inline-flex items-center gap-1.5 rounded-full bg-[#2563EB]/10 px-3.5 py-1 text-xs font-bold text-[#2563EB] mb-3">
               <Sparkles className="h-3.5 w-3.5" />
-              <span>About Us</span>
+              <span>Technology Education with a Career Focus</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-[#151922]">
-              About 6F IT School
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#151922]">
+              About 6F School of IT
             </h2>
-            <p className="mt-2 text-sm sm:text-base text-[#626B78] leading-relaxed">
-              6F IT School is a technology training institution focused on AWS, DevOps, and Agentic AI.
-              We bridge the gap between classroom theory and industry production standards.
+            <p className="mt-4 text-base sm:text-lg text-[#626B78] leading-relaxed">
+              6F School of IT is a technology-focused training academy helping IT professionals strengthen their skills and prepare for the next stage of their careers.
             </p>
           </motion.div>
 
-          {/* Mission & Vision Row */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+          {/* 3 Core Pillars: Mission, Vision, Purpose */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            {/* Our Mission */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               whileHover={{ y: -4 }}
-              className="rounded-3xl border border-[#E5E9F0] bg-white p-7 shadow-2xs hover:border-[#2563EB]/40 transition-all"
+              className="rounded-3xl border border-[#E5E9F0] bg-white p-7 shadow-2xs hover:border-[#2563EB]/40 transition-all flex flex-col justify-between"
             >
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#F7F9FC] border border-[#E5E9F0] text-[#2563EB] mb-4">
-                <Target className="h-6 w-6" />
-              </div>
-              <h3 className="text-lg font-bold text-[#151922]">Our Mission</h3>
-              <p className="mt-2 text-xs sm:text-sm text-[#626B78] leading-relaxed">
-                Equip aspiring engineers with hands-on, verifiable technical skills through guided cloud labs,
-                code review discipline, and audited capstone projects.
-              </p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              whileHover={{ y: -4 }}
-              className="rounded-3xl border border-[#E5E9F0] bg-white p-7 shadow-2xs hover:border-[#2563EB]/40 transition-all"
-            >
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#F7F9FC] border border-[#E5E9F0] text-[#2563EB] mb-4">
-                <Compass className="h-6 w-6" />
-              </div>
-              <h3 className="text-lg font-bold text-[#151922]">Our Vision</h3>
-              <p className="mt-2 text-xs sm:text-sm text-[#626B78] leading-relaxed">
-                Establish an educational benchmark where software engineers qualify by deploying real infrastructure
-                and autonomous AI agents, rather than memorizing slides.
-              </p>
-            </motion.div>
-          </div>
-
-          {/* 4 Pillars Grid */}
-          <div className="rounded-3xl border border-[#E5E9F0] bg-white p-8 sm:p-10 shadow-2xs">
-            <h3 className="text-base font-bold uppercase tracking-wider text-[#151922] mb-6">
-              Our Core Educational Pillars
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {aboutPillars.map((pillar, idx) => (
-                <div key={idx} className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-[#2563EB] shrink-0" />
-                    <h4 className="text-sm font-bold text-[#151922]">{pillar.title}</h4>
-                  </div>
-                  <p className="text-xs text-[#626B78] leading-relaxed pl-6">
-                    {pillar.desc}
-                  </p>
+              <div>
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 border border-blue-100 text-[#2563EB] mb-4">
+                  <Target className="h-6 w-6" />
                 </div>
-              ))}
-            </div>
+                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#2563EB] bg-blue-50 px-2 py-0.5 rounded">
+                  Core Directive
+                </span>
+                <h3 className="text-xl font-extrabold text-[#151922] mt-2 mb-3">Our Mission</h3>
+                <p className="text-xs sm:text-sm text-[#626B78] leading-relaxed">
+                  To make quality technology education practical, accessible, and career-focused—building the skills, mindset, and confidence needed to succeed.
+                </p>
+              </div>
+            </motion.div>
+
+            {/* Our Vision */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              whileHover={{ y: -4 }}
+              transition={{ delay: 0.08 }}
+              className="rounded-3xl border border-[#E5E9F0] bg-white p-7 shadow-2xs hover:border-sky-500/40 transition-all flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-50 border border-sky-100 text-sky-600 mb-4">
+                  <Compass className="h-6 w-6" />
+                </div>
+                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-sky-600 bg-sky-50 px-2 py-0.5 rounded">
+                  Long-Term Horizon
+                </span>
+                <h3 className="text-xl font-extrabold text-[#151922] mt-2 mb-3">Our Vision</h3>
+                <p className="text-xs sm:text-sm text-[#626B78] leading-relaxed">
+                  To become a trusted learning partner for IT professionals throughout their careers, helping them adapt, grow, and succeed as technology evolves.
+                </p>
+              </div>
+            </motion.div>
+
+            {/* Our Purpose */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              whileHover={{ y: -4 }}
+              transition={{ delay: 0.16 }}
+              className="rounded-3xl border border-[#E5E9F0] bg-white p-7 shadow-2xs hover:border-indigo-500/40 transition-all flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 mb-4">
+                  <Layers className="h-6 w-6" />
+                </div>
+                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">
+                  Why We Exist
+                </span>
+                <h3 className="text-xl font-extrabold text-[#151922] mt-2 mb-3">Our Purpose</h3>
+                <p className="text-xs sm:text-sm text-[#626B78] leading-relaxed">
+                  Bridge the gap between theoretical knowledge and practical engineering skills through structured learning, hands-on labs, projects, and interview preparation.
+                </p>
+              </div>
+            </motion.div>
           </div>
+
+          {/* Highlight Banner: Our Promise */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="rounded-3xl border border-[#2563EB]/30 bg-gradient-to-r from-blue-50/80 via-white to-indigo-50/80 p-8 sm:p-10 shadow-sm relative overflow-hidden"
+          >
+            <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-[#2563EB]/10 via-transparent to-transparent rounded-bl-full pointer-events-none" />
+            <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+              <div className="flex items-start sm:items-center gap-4 sm:gap-5">
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-[#2563EB] text-white shadow-md shadow-blue-500/20">
+                  <Award className="h-7 w-7" />
+                </div>
+                <div>
+                  <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-wider text-[#2563EB] mb-1">
+                    <CheckCircle2 className="h-3.5 w-3.5" />
+                    <span>Our Promise</span>
+                  </div>
+                  <h3 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-[#151922] tracking-tight">
+                    Make you employable for your entire career.
+                  </h3>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => openEnquiryModal()}
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white px-6 py-3 text-xs font-bold shadow-md shadow-blue-500/15 transition-all cursor-pointer shrink-0"
+              >
+                <span>Talk with an Advisor</span>
+                <ArrowRight className="h-4 w-4" />
+              </button>
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -1370,6 +1212,120 @@ export const HomePage: React.FC = () => {
           </div>
         )}
       </AnimatePresence>
+
+      {/* WhatsApp Screenshot Lightbox Modal */}
+      <AnimatePresence>
+        {activeScreenshot && (
+          <div
+            role="dialog"
+            aria-modal="true"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/75 backdrop-blur-sm"
+          >
+            <div className="fixed inset-0" onClick={() => setActiveScreenshot(null)} aria-hidden="true" />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 16 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 16 }}
+              className="relative z-10 w-full max-w-lg rounded-3xl bg-white shadow-2xl border border-slate-200 overflow-hidden text-left"
+            >
+              {/* WhatsApp App Bar */}
+              <div className="flex items-center justify-between bg-[#075E54] px-5 py-3.5 text-white">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-600 text-white font-bold text-sm">
+                    {activeScreenshot.studentInitials}
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-white flex items-center gap-1.5">
+                      {activeScreenshot.name}
+                      <CheckCircle2 className="h-3.5 w-3.5 text-emerald-300" />
+                    </h4>
+                    <span className="text-[11px] text-emerald-100/90 block">
+                      {activeScreenshot.placementOffer || activeScreenshot.targetRole}
+                    </span>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setActiveScreenshot(null)}
+                  className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
+                  aria-label="Close modal"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+
+              {/* Chat Viewport / Screenshot in Lightbox */}
+              <div className="p-5 sm:p-6 bg-[#EFEAE2] min-h-[340px] flex flex-col justify-between">
+                {activeScreenshot.whatsappScreenshotUrl ? (
+                  <img
+                    src={activeScreenshot.whatsappScreenshotUrl}
+                    alt={`WhatsApp Feedback from ${activeScreenshot.name}`}
+                    className="w-full h-auto rounded-2xl shadow-md border border-slate-300"
+                  />
+                ) : (
+                  <div className="space-y-4">
+                    <div className="flex justify-center">
+                      <span className="rounded-lg bg-white/80 backdrop-blur-xs px-3 py-1 text-[10px] font-bold text-slate-500 uppercase tracking-wider shadow-2xs">
+                        Verified WhatsApp Placement Message
+                      </span>
+                    </div>
+
+                    {/* Chat Bubble */}
+                    <div className="relative max-w-sm ml-auto bg-[#D9FDD3] p-4 rounded-2xl rounded-tr-xs shadow-sm border border-emerald-200/50">
+                      <p className="text-sm text-[#111B21] leading-relaxed font-normal">
+                        {activeScreenshot.chatSnippet}
+                      </p>
+                      <div className="mt-2 flex items-center justify-end gap-1.5 text-[11px] text-[#667781]">
+                        <span>{activeScreenshot.chatTime}</span>
+                        <CheckCheck className="h-4 w-4 text-[#53BDEB]" />
+                      </div>
+                    </div>
+
+                    {/* Course & Outcome Tag */}
+                    <div className="rounded-2xl border border-emerald-200 bg-white p-3.5 shadow-2xs flex items-center justify-between">
+                      <div>
+                        <span className="text-[10px] font-mono font-bold text-emerald-700 uppercase block">
+                          Program Completed
+                        </span>
+                        <span className="text-xs font-bold text-[#151922]">
+                          {activeScreenshot.courseCompleted}
+                        </span>
+                      </div>
+                      <span className="rounded-full bg-emerald-50 border border-emerald-200 px-3 py-1 text-xs font-bold text-emerald-700">
+                        {activeScreenshot.placementOffer}
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Modal Footer */}
+              <div className="p-4 bg-white border-t border-slate-100 flex items-center justify-between">
+                <span className="text-xs text-slate-500 font-medium">
+                  Verified student feedback • 6F IT School
+                </span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const course = COURSES.find((c) => c.slug === activeScreenshot.courseSlug);
+                    setActiveScreenshot(null);
+                    if (course) setSelectedSyllabus(course);
+                  }}
+                  className="rounded-xl bg-[#2563EB] text-white px-4 py-2 text-xs font-bold hover:bg-[#1D4ED8] transition-colors cursor-pointer"
+                >
+                  View Course Syllabus &rarr;
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Project Architecture & Specs Lightbox Pop-up Modal */}
+      <ProjectDetailModal
+        project={selectedProject}
+        onClose={() => setSelectedProject(null)}
+      />
     </div>
   );
 };

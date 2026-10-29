@@ -52,7 +52,7 @@ export const Footer: React.FC = () => {
               </div>
             </a>
             <p className="text-xs text-[#626B78] leading-relaxed max-w-sm">
-              Hands-on, project-based technology training in AWS, DevOps, and Agentic AI.
+              Hands-on, project-based technology training in AI-Powered AWS DevOps, Azure DevOps, and AIOps.
             </p>
           </div>
 

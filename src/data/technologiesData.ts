@@ -8,9 +8,64 @@ export const TECHNOLOGIES: TechnologyItem[] = [
     description:
       'The world’s most comprehensive and broadly adopted cloud platform, providing scalable compute, storage, databases, and networking.',
     proficiencyLevel: 'Core Curriculum',
-    relatedCourseSlugs: ['aws-cloud-computing', 'devops-engineering'],
+    relatedCourseSlugs: ['ai-powered-aws-devops'],
     iconKey: 'Cloud',
-    highlights: ['VPC & Subnets', 'EC2 & Auto Scaling', 'S3 & IAM', 'RDS & Serverless Lambda'],
+    highlights: ['VPC & Subnets', 'EC2 & Auto Scaling', 'S3 & IAM', 'EKS & Serverless Lambda'],
+  },
+  {
+    id: 'azure',
+    name: 'Microsoft Azure',
+    category: 'Cloud',
+    description:
+      'Enterprise cloud platform offering comprehensive computing, Azure Kubernetes Service (AKS), Virtual Networks, and integrated DevOps services.',
+    proficiencyLevel: 'Core Curriculum',
+    relatedCourseSlugs: ['ai-powered-azure-devops'],
+    iconKey: 'Cloud',
+    highlights: ['Azure VNet', 'AKS Clusters', 'Virtual Machine Scale Sets', 'Microsoft Entra ID'],
+  },
+  {
+    id: 'azure-devops',
+    name: 'Azure DevOps & Pipelines',
+    category: 'Automation',
+    description:
+      'Complete enterprise DevOps toolchain encompassing multi-stage YAML Azure Pipelines, Azure Repos, and automated release gates.',
+    proficiencyLevel: 'Core Curriculum',
+    relatedCourseSlugs: ['ai-powered-azure-devops'],
+    iconKey: 'GitMerge',
+    highlights: ['Multi-Stage YAML', 'Staging Approval Gates', 'Azure Artifacts', 'Automated Release Rollbacks'],
+  },
+  {
+    id: 'amazon-q',
+    name: 'Amazon Q Developer',
+    category: 'Artificial Intelligence',
+    description:
+      'Generative AI assistant specifically optimized for AWS cloud architecture, code development, automated security audits, and troubleshooting.',
+    proficiencyLevel: 'Core Curriculum',
+    relatedCourseSlugs: ['ai-powered-aws-devops'],
+    iconKey: 'Bot',
+    highlights: ['IaC Generation', 'Vulnerability Audits', 'CLI & Console Integration', 'Automated Unit Tests'],
+  },
+  {
+    id: 'github-copilot',
+    name: 'GitHub Copilot',
+    category: 'Artificial Intelligence',
+    description:
+      'AI pair programmer that accelerates pipeline creation, script authoring, test development, and infrastructure configuration in IDEs.',
+    proficiencyLevel: 'Core Curriculum',
+    relatedCourseSlugs: ['ai-powered-azure-devops'],
+    iconKey: 'Bot',
+    highlights: ['Pipeline YAML Synthesis', 'Automated Test Writing', 'Shell Script Generation', 'Context-Aware Prompts'],
+  },
+  {
+    id: 'opentelemetry',
+    name: 'OpenTelemetry (OTel)',
+    category: 'Monitoring',
+    description:
+      'Vendor-agnostic telemetry framework for capturing distributed traces, metrics, and logs across cloud-native architectures.',
+    proficiencyLevel: 'Core Curriculum',
+    relatedCourseSlugs: ['ai-powered-aiops'],
+    iconKey: 'Activity',
+    highlights: ['Unified Telemetry', 'OTel Collector', 'Auto-Instrumentation', 'Distributed Tracing'],
   },
   {
     id: 'docker',
@@ -19,20 +74,20 @@ export const TECHNOLOGIES: TechnologyItem[] = [
     description:
       'Standardized container runtime that packages applications and dependencies into immutable containers for predictable execution.',
     proficiencyLevel: 'Core Curriculum',
-    relatedCourseSlugs: ['devops-engineering', 'agentic-ai-automation'],
+    relatedCourseSlugs: ['ai-powered-aws-devops', 'ai-powered-azure-devops', 'ai-powered-aiops'],
     iconKey: 'Box',
     highlights: ['Multi-Stage Builds', 'Layer Caching', 'Docker Compose', 'Container Networking'],
   },
   {
     id: 'kubernetes',
-    name: 'Kubernetes',
+    name: 'Kubernetes (EKS & AKS)',
     category: 'Deployment',
     description:
       'Production-grade container orchestration system automating deployment, scaling, self-healing, and management of containerized applications.',
     proficiencyLevel: 'Core Curriculum',
-    relatedCourseSlugs: ['devops-engineering'],
+    relatedCourseSlugs: ['ai-powered-aws-devops', 'ai-powered-azure-devops', 'ai-powered-aiops'],
     iconKey: 'Layers',
-    highlights: ['Pods & Deployments', 'Services & Ingress', 'ConfigMaps & Secrets', 'Helm Packaging'],
+    highlights: ['Pods & Deployments', 'Services & Ingress', 'Helm Packaging', 'HPA Autoscaling'],
   },
   {
     id: 'terraform',
@@ -41,7 +96,7 @@ export const TECHNOLOGIES: TechnologyItem[] = [
     description:
       'Declarative Infrastructure as Code (IaC) tool enabling safe, predictable cloud resource provisioning across multiple providers.',
     proficiencyLevel: 'Core Curriculum',
-    relatedCourseSlugs: ['devops-engineering'],
+    relatedCourseSlugs: ['ai-powered-aws-devops', 'ai-powered-azure-devops'],
     iconKey: 'Cpu',
     highlights: ['Declarative HCL', 'Remote State & Locking', 'Modular Blueprints', 'Plan & Apply Workflows'],
   },
@@ -52,7 +107,7 @@ export const TECHNOLOGIES: TechnologyItem[] = [
     description:
       'The foundational operating system of the modern cloud, covering process management, security permissions, networking, and shell automation.',
     proficiencyLevel: 'Core Curriculum',
-    relatedCourseSlugs: ['devops-engineering', 'aws-cloud-computing'],
+    relatedCourseSlugs: ['ai-powered-aws-devops', 'ai-powered-azure-devops', 'ai-powered-aiops'],
     iconKey: 'Terminal',
     highlights: ['Bash Scripting', 'Systemd Services', 'SSH Security', 'Network Diagnostics'],
   },
@@ -63,7 +118,7 @@ export const TECHNOLOGIES: TechnologyItem[] = [
     description:
       'Automated continuous integration and delivery pipelines triggered by repository events for testing, building, and deployment.',
     proficiencyLevel: 'Core Curriculum',
-    relatedCourseSlugs: ['devops-engineering'],
+    relatedCourseSlugs: ['ai-powered-aws-devops', 'ai-powered-azure-devops'],
     iconKey: 'GitMerge',
     highlights: ['Automated Testing', 'Docker Build & Push', 'Secret Management', 'Multi-Stage Workflows'],
   },
@@ -74,7 +129,7 @@ export const TECHNOLOGIES: TechnologyItem[] = [
     description:
       'Industry-standard open-source observability stack for metric scraping, time-series storage, alert evaluation, and real-time visualization.',
     proficiencyLevel: 'Core Curriculum',
-    relatedCourseSlugs: ['devops-engineering'],
+    relatedCourseSlugs: ['ai-powered-aws-devops', 'ai-powered-aiops'],
     iconKey: 'Activity',
     highlights: ['PromQL Queries', 'Custom Dashboards', 'Alertmanager Webhooks', 'Cluster Telemetry'],
   },
@@ -85,7 +140,7 @@ export const TECHNOLOGIES: TechnologyItem[] = [
     description:
       'The primary language for AI engineering, backend services, automation scripts, and data manipulation with extensive ecosystem support.',
     proficiencyLevel: 'Core Curriculum',
-    relatedCourseSlugs: ['agentic-ai-automation'],
+    relatedCourseSlugs: ['ai-powered-aiops'],
     iconKey: 'Code2',
     highlights: ['Async Programming', 'Pydantic Schemas', 'API Integration', 'Data Structures'],
   },
@@ -96,20 +151,9 @@ export const TECHNOLOGIES: TechnologyItem[] = [
     description:
       'Advanced frameworks for building stateful, multi-actor AI applications and cyclic agent workflows with deterministic control.',
     proficiencyLevel: 'Core Curriculum',
-    relatedCourseSlugs: ['agentic-ai-automation'],
+    relatedCourseSlugs: ['ai-powered-aiops'],
     iconKey: 'Bot',
     highlights: ['Stateful Graphs', 'Human-in-the-Loop', 'Tool Calling Loops', 'Checkpoints & Memory'],
-  },
-  {
-    id: 'crewai',
-    name: 'CrewAI Multi-Agent Systems',
-    category: 'Artificial Intelligence',
-    description:
-      'Framework for orchestrating autonomous AI agents that simulate team roles, collaborate, delegate tasks, and solve complex workflows.',
-    proficiencyLevel: 'Specialised Lab',
-    relatedCourseSlugs: ['agentic-ai-automation'],
-    iconKey: 'Users',
-    highlights: ['Role-Based Agents', 'Autonomous Delegation', 'Hierarchical Processes', 'Tool Sharing'],
   },
   {
     id: 'chromadb',
@@ -118,63 +162,8 @@ export const TECHNOLOGIES: TechnologyItem[] = [
     description:
       'Specialized vector databases engineered to store, index, and query high-dimensional embeddings for Retrieval-Augmented Generation (RAG).',
     proficiencyLevel: 'Core Curriculum',
-    relatedCourseSlugs: ['agentic-ai-automation'],
+    relatedCourseSlugs: ['ai-powered-aiops'],
     iconKey: 'Database',
     highlights: ['Cosine Similarity', 'Embedding Indexing', 'Metadata Filtering', 'Hybrid Search'],
-  },
-  {
-    id: 'react',
-    name: 'React',
-    category: 'Frontend',
-    description:
-      'The component-based UI library powering modern, dynamic single-page web applications with reactive state and declarative views.',
-    proficiencyLevel: 'Core Curriculum',
-    relatedCourseSlugs: ['agentic-ai-automation'],
-    iconKey: 'Layout',
-    highlights: ['Functional Components', 'Custom Hooks', 'Client-Side Routing', 'Component Composition'],
-  },
-  {
-    id: 'typescript',
-    name: 'TypeScript',
-    category: 'Programming',
-    description:
-      'Typed superset of JavaScript providing static type definitions, compile-time error detection, and enterprise-grade maintainability.',
-    proficiencyLevel: 'Core Curriculum',
-    relatedCourseSlugs: ['agentic-ai-automation', 'devops-engineering'],
-    iconKey: 'FileCode',
-    highlights: ['Type Safety', 'Interfaces & Generics', 'Strict Linting', 'Refactoring Confidence'],
-  },
-  {
-    id: 'nodejs',
-    name: 'Node.js & Express',
-    category: 'Backend',
-    description:
-      'Event-driven asynchronous JavaScript runtime for high-performance network servers and RESTful API backends.',
-    proficiencyLevel: 'Core Curriculum',
-    relatedCourseSlugs: ['devops-engineering'],
-    iconKey: 'Server',
-    highlights: ['RESTful API Design', 'Middleware Pipelines', 'Async I/O', 'Error Handling'],
-  },
-  {
-    id: 'postgresql-prisma',
-    name: 'PostgreSQL & Prisma ORM',
-    category: 'Databases',
-    description:
-      'Enterprise-grade relational database coupled with next-generation type-safe object-relational mapping and schema migrations.',
-    proficiencyLevel: 'Core Curriculum',
-    relatedCourseSlugs: ['aws-cloud-computing', 'devops-engineering'],
-    iconKey: 'Database',
-    highlights: ['Relational Modeling', 'Schema Migrations', 'Type-Safe Queries', 'ACID Transactions'],
-  },
-  {
-    id: 'jenkins',
-    name: 'Jenkins Automation Server',
-    category: 'DevOps',
-    description:
-      'Widely used enterprise open-source automation server supporting extensible declarative pipelines and hybrid infrastructure builds.',
-    proficiencyLevel: 'Industry Standard',
-    relatedCourseSlugs: ['devops-engineering'],
-    iconKey: 'GitBranch',
-    highlights: ['Declarative Pipelines', 'Distributed Agents', 'Plugin Ecosystem', 'Enterprise CI'],
   },
 ];

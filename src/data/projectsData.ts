@@ -2,27 +2,63 @@ import type { StudentProject } from '../types';
 
 export const STUDENT_PROJECTS: StudentProject[] = [
   {
-    id: 'gitops-microservices-k8s',
-    title: 'Automated GitOps Microservices Deployment on AWS EKS',
-    category: 'DevOps & GitOps',
+    id: 'ai-powered-aws-gitops',
+    title: 'AI-Accelerated GitOps CI/CD Microservices Pipeline on AWS EKS',
+    category: 'AI-Powered AWS DevOps',
     description:
-      'A multi-tier microservices architecture with automated CI/CD using GitHub Actions, Helm packaging, and declarative rollout to a managed Kubernetes cluster on AWS.',
-    technologies: ['Kubernetes', 'Docker', 'AWS EKS', 'GitHub Actions', 'Helm', 'Prometheus', 'Grafana'],
+      'A multi-tier microservices architecture with automated CI/CD using GitHub Actions, Amazon Q Developer code security analysis, Helm packaging, and declarative rollout to AWS EKS.',
+    technologies: ['AWS EKS', 'Amazon Q Developer', 'Terraform', 'Docker', 'GitHub Actions', 'Helm', 'CloudWatch'],
     architectureSummary:
-      'Git push triggers multi-stage container build and vulnerability scanning, publishing to Amazon ECR. Kubernetes manifests are managed via Helm charts with automated rollout and Prometheus telemetry.',
+      'GitHub push triggers multi-stage container build and automated Amazon Q vulnerability audits, publishing to Amazon ECR. Kubernetes manifests are managed via Helm charts with automated rollback and CloudWatch anomaly telemetry.',
     keyOutcomes: [
-      'Zero-downtime rolling updates verified under load',
-      'Immutable container images tagged by git commit SHA',
-      'Prometheus custom metrics visualized on live Grafana dashboards',
+      'Zero-downtime rolling updates verified under simulated production load',
+      'Immutable container images tagged by git commit SHA with automated CVE scanning',
+      'AI-assisted security reviews preventing unencrypted storage and open security groups',
     ],
     demoUrl: '#',
-    githubUrl: 'https://github.com/example/devops-gitops-sample',
+    githubUrl: 'https://github.com/example/ai-aws-gitops-sample',
+    isPlaceholder: true,
+  },
+  {
+    id: 'ai-powered-azure-pipeline',
+    title: 'Enterprise AI-Assisted Azure DevOps & AKS Microservices Infrastructure',
+    category: 'AI-Powered Azure DevOps',
+    description:
+      'An enterprise Azure DevOps platform featuring multi-stage YAML pipelines, GitHub Copilot test automation, Terraform & Azure Bicep IaC, and managed Azure Kubernetes Service deployment.',
+    technologies: ['Microsoft Azure', 'Azure DevOps', 'Azure Pipelines', 'AKS', 'GitHub Copilot', 'Terraform', 'Azure Bicep'],
+    architectureSummary:
+      'Enterprise Virtual Network with private subnets, Azure Bastion, and Azure Application Gateway with WAF. Azure Pipelines automates testing, container image building to ACR, and AKS deployment with automated release gates.',
+    keyOutcomes: [
+      'Multi-stage Azure Pipelines YAML with mandatory staging approval gates',
+      'Zero-trust secrets injection using Azure Key Vault and Secrets Store CSI driver',
+      'Copilot-generated automated integration test suites achieving 92% coverage',
+    ],
+    demoUrl: '#',
+    githubUrl: 'https://github.com/example/ai-azure-devops-sample',
+    isPlaceholder: true,
+  },
+  {
+    id: 'aiops-self-healing-engine',
+    title: 'Autonomous AIOps Telemetry Anomaly Detection & Self-Healing Engine',
+    category: 'AI-Powered AIOps (Artificial Intelligence for IT Operations)',
+    description:
+      'An intelligent observability and automated incident remediation system utilizing OpenTelemetry, Prometheus metrics, machine-learning anomaly detection, and LangGraph root-cause analysis bots.',
+    technologies: ['AIOps', 'OpenTelemetry', 'Prometheus', 'Grafana', 'Python', 'LangGraph', 'Kubernetes'],
+    architectureSummary:
+      'Distributed microservices instrumented with OpenTelemetry forward metrics and traces to Prometheus. Machine learning models score real-time anomalies, triggering an autonomous LangGraph agent that conducts root-cause analysis and executes Kubernetes pod rollbacks.',
+    keyOutcomes: [
+      '80% reduction in noisy duplicate alerts through topological alert correlation',
+      'Autonomous generation of structured incident post-mortems within 15 seconds of alert firing',
+      'Verified automated self-healing remediation tested against simulated memory leak failures',
+    ],
+    demoUrl: '#',
+    githubUrl: 'https://github.com/example/aiops-telemetry-sample',
     isPlaceholder: true,
   },
   {
     id: 'aws-resilient-multi-tier',
-    title: 'High-Availability Multi-Tier E-Commerce Infrastructure',
-    category: 'Cloud Infrastructure',
+    title: 'Enterprise High-Availability Multi-Tier AWS Infrastructure',
+    category: 'AI-Powered AWS DevOps',
     description:
       'Production-grade cloud topology designed according to the AWS Well-Architected Framework, featuring auto-scaling compute groups across multiple availability zones and managed database failover.',
     technologies: ['AWS VPC', 'Amazon EC2', 'Application Load Balancer', 'Amazon RDS', 'Amazon S3', 'CloudWatch'],
@@ -35,42 +71,6 @@ export const STUDENT_PROJECTS: StudentProject[] = [
     ],
     demoUrl: '#',
     githubUrl: 'https://github.com/example/aws-multi-tier-sample',
-    isPlaceholder: true,
-  },
-  {
-    id: 'agentic-ai-researcher',
-    title: 'Autonomous Code-Review & Technical Research Multi-Agent System',
-    category: 'Agentic AI',
-    description:
-      'A collaborative multi-agent architecture utilizing LangGraph and CrewAI to inspect source code repositories, cross-reference internal architectural standards using RAG, and produce detailed code audit reports.',
-    technologies: ['Python', 'LangGraph', 'CrewAI', 'ChromaDB', 'FastAPI', 'OpenAI API', 'Docker'],
-    architectureSummary:
-      'A supervisor agent delegates parsing, vulnerability analysis, and documentation cross-referencing to specialized worker agents with memory checkpoints and vector search over security guidelines.',
-    keyOutcomes: [
-      'Autonomous detection of OWASP Top 10 vulnerabilities in sample pull requests',
-      'Deterministic output format using Pydantic JSON schema constraints',
-      'Streaming server-sent events interface for real-time thought trace display',
-    ],
-    demoUrl: '#',
-    githubUrl: 'https://github.com/example/agentic-researcher-sample',
-    isPlaceholder: true,
-  },
-  {
-    id: 'cloud-observability-pipeline',
-    title: 'Automated Cloud Telemetry & Distributed Tracing Stack',
-    category: 'DevOps & GitOps',
-    description:
-      'A production monitoring and distributed tracing topology for microservices, featuring Prometheus metrics collection, Grafana dashboards, Loki log aggregation, and OpenTelemetry instrumentation.',
-    technologies: ['Prometheus', 'Grafana', 'Loki', 'OpenTelemetry', 'Docker', 'AWS EC2', 'Linux'],
-    architectureSummary:
-      'Containerized services instrumented with OpenTelemetry send metrics and traces to a centralized collector pipeline, triggering alertmanager webhooks on SLA violations.',
-    keyOutcomes: [
-      'Sub-second query latencies across aggregated service log streams',
-      'Custom alertmanager routing policies configured for severity tiers',
-      'Interactive Grafana visual dashboards displaying p95 and p99 response times',
-    ],
-    demoUrl: '#',
-    githubUrl: 'https://github.com/example/cloud-telemetry-sample',
     isPlaceholder: true,
   },
 ];

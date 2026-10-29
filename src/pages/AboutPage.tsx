@@ -33,8 +33,7 @@ export const AboutPage: React.FC = () => {
             About 6F IT School
           </h1>
           <p className="mt-3 text-base sm:text-lg text-[#626B78] leading-relaxed">
-            6F IT School is a technology training institution focused on AWS, DevOps, Agentic AI, and Full Stack
-            Development. We bridge the gap between classroom theory and industry production standards.
+            6F IT School is a technology training institution focused on AI-Powered AWS DevOps, Azure DevOps, and AIOps. We bridge the gap between classroom theory and industry production standards.
           </p>
         </motion.div>
 

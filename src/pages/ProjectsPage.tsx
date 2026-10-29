@@ -19,10 +19,9 @@ export const ProjectsPage: React.FC = () => {
 
   const categories = [
     'All',
-    'Cloud Infrastructure',
-    'DevOps & GitOps',
-    'Agentic AI',
-    'Full Stack Web',
+    'AI-Powered AWS DevOps',
+    'AI-Powered Azure DevOps',
+    'AI-Powered AIOps (Artificial Intelligence for IT Operations)',
   ];
 
   const filteredProjects =

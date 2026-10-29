@@ -56,7 +56,7 @@ export const EnquiryModal: React.FC = () => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: 10 }}
             transition={{ type: 'spring', damping: 25, stiffness: 350 }}
-            className="relative w-full max-w-lg rounded-2xl border border-[#E5E9F0] bg-white p-6 sm:p-7 shadow-2xl z-10 my-8"
+            className="relative w-full max-w-xl rounded-3xl border border-[#E5E9F0] bg-white p-6 sm:p-8 shadow-2xl z-10 my-8 max-h-[90vh] overflow-y-auto"
           >
             {/* Header */}
             <div className="flex items-start justify-between pb-4 border-b border-[#E5E9F0]">

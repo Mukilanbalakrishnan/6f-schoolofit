@@ -43,7 +43,7 @@ export const EnquiryPage: React.FC = () => {
               Course Enquiry
             </h1>
             <p className="mt-2 text-xs sm:text-sm text-[#626B78]">
-              Fill out the 5 fields below to receive verified syllabus outlines and upcoming cohort schedules.
+              Complete the enquiry form below to receive verified syllabus outlines and upcoming cohort schedules.
             </p>
 
             {initialCourseTitle && (

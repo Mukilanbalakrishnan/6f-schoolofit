@@ -16,10 +16,13 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course, onViewSyllabus }
   const renderIcon = () => {
     switch (course.category) {
       case 'Cloud':
+      case 'AWS DevOps':
         return <Cloud className="h-5 w-5 text-[#2563EB]" />;
       case 'DevOps':
+      case 'Azure DevOps':
         return <GitMerge className="h-5 w-5 text-[#2563EB]" />;
       case 'AI & Automation':
+      case 'AIOps':
         return <Bot className="h-5 w-5 text-[#2563EB]" />;
       default:
         return <Cloud className="h-5 w-5 text-[#2563EB]" />;

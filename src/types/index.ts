@@ -14,7 +14,7 @@ export interface Course {
   id: string;
   slug: string;
   title: string;
-  category: 'Cloud' | 'DevOps' | 'AI & Automation';
+  category: 'Cloud' | 'DevOps' | 'AI & Automation' | 'AWS DevOps' | 'Azure DevOps' | 'AIOps' | string;
   headline: string;
   summary: string;
   description: string;
@@ -65,7 +65,14 @@ export interface TechnologyItem {
 export interface StudentProject {
   id: string;
   title: string;
-  category: 'Cloud Infrastructure' | 'DevOps & GitOps' | 'Agentic AI' | 'Full Stack Web';
+  category:
+    | 'AI-Powered AWS DevOps'
+    | 'AI-Powered Azure DevOps'
+    | 'AI-Powered AIOps (Artificial Intelligence for IT Operations)'
+    | 'Cloud Infrastructure'
+    | 'DevOps & GitOps'
+    | 'Agentic AI'
+    | 'Full Stack Web';
   description: string;
   technologies: string[];
   architectureSummary: string;
@@ -80,6 +87,10 @@ export interface SuccessStory {
   name?: string;
   studentInitials: string;
   avatarUrl?: string;
+  whatsappScreenshotUrl?: string;
+  chatSnippet?: string;
+  chatTime?: string;
+  placementOffer?: string;
   background: string;
   targetRole?: string;
   courseCompleted: string;
@@ -116,6 +127,10 @@ export interface EnquiryFormData {
   fullName: string;
   email: string;
   phoneNumber: string;
+  location: string;
+  ageCategory: string;
+  currentStatus: string;
+  otherStatusDetails?: string;
   courseInterestedIn: string;
   message: string;
 }
@@ -124,6 +139,10 @@ export interface FormErrors {
   fullName?: string;
   email?: string;
   phoneNumber?: string;
+  location?: string;
+  ageCategory?: string;
+  currentStatus?: string;
+  otherStatusDetails?: string;
   courseInterestedIn?: string;
   message?: string;
 }

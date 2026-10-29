@@ -10,7 +10,7 @@ export const CoursesPage: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const { openEnquiryModal } = useEnquiry();
 
-  const categories = ['All', 'Cloud', 'DevOps', 'AI & Automation'];
+  const categories = ['All', 'AWS DevOps', 'Azure DevOps', 'AIOps'];
 
   const filteredCourses = useMemo(() => {
     return COURSES.filter((course) => {
