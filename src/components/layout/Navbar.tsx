@@ -113,20 +113,14 @@ export const Navbar: React.FC = () => {
         <a
           href="#home"
           onClick={(e) => handleNavClick('home', e)}
-          className="flex items-center gap-2.5 focus:outline-none focus:ring-2 focus:ring-[#2563EB] rounded-md px-1 py-0.5 cursor-pointer"
-          aria-label="6F IT School Homepage"
+          className="flex items-center focus:outline-none focus:ring-2 focus:ring-[#2563EB] rounded-md py-1 cursor-pointer"
+          aria-label="6F School of IT Homepage"
         >
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#2563EB] text-white font-bold text-base shadow-xs">
-            6F
-          </div>
-          <div className="flex flex-col text-left">
-            <span className="text-base font-bold tracking-tight text-[#151922] leading-none">
-              6F IT School
-            </span>
-            <span className="text-[10px] font-semibold tracking-wide text-[#626B78] uppercase mt-0.5">
-              Technology Academy
-            </span>
-          </div>
+          <img
+            src="/1-no-bg.svg"
+            alt="6F School of IT"
+            className="h-10 sm:h-11 w-auto object-contain"
+          />
         </a>
 
         {/* Desktop Nav - In-page Smooth Navigation */}

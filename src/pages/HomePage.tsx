@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { useEnquiry } from '../context/EnquiryContext';
 import { COURSES } from '../data/coursesData';
 import { STUDENT_PROJECTS } from '../data/projectsData';
-import { SUCCESS_STORIES, VIDEO_TESTIMONIALS } from '../data/storiesData';
+import { VIDEO_TESTIMONIALS, ALL_WHATSAPP_REVIEWS } from '../data/storiesData';
 import { GLOBAL_FAQS } from '../data/faqsData';
-import type { VideoTestimonial, Course, SuccessStory, StudentProject } from '../types';
+import type { VideoTestimonial, Course, StudentProject } from '../types';
 import { CourseCard } from '../components/courses/CourseCard';
 import { SyllabusModal } from '../components/courses/SyllabusModal';
 import { EnquiryForm } from '../components/enquiry/EnquiryForm';
@@ -13,6 +13,7 @@ import { FlightPathJourney } from '../components/home/FlightPathJourney';
 import { WhyChooseUsRoadmap } from '../components/home/WhyChooseUsRoadmap';
 import { ProjectCard } from '../components/projects/ProjectCard';
 import { ProjectDetailModal } from '../components/projects/ProjectDetailModal';
+import { SectionMarginSketches } from '../components/common/SectionMarginSketches';
 import heroBg from '../assets/hero-bg.jpg';
 import {
   ArrowRight,
@@ -32,13 +33,12 @@ import {
   ChevronDown,
   HelpCircle,
   Award,
-  Star,
   Cloud,
   GitMerge,
   Bot,
-  MessageCircle,
-  CheckCheck,
   ZoomIn,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -57,8 +57,71 @@ export const HomePage: React.FC = () => {
   // Video modal state
   const [activeVideo, setActiveVideo] = useState<VideoTestimonial | null>(null);
 
+    // Carousel state for student WhatsApp review cards
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(true);
+  const [isPaused, setIsPaused] = useState(false);
+  const [visibleCards, setVisibleCards] = useState(4);
+
   // Active WhatsApp Screenshot Lightbox Modal
-  const [activeScreenshot, setActiveScreenshot] = useState<SuccessStory | null>(null);
+  const [activeScreenshotIndex, setActiveScreenshotIndex] = useState<number | null>(null);
+  const activeScreenshot = activeScreenshotIndex !== null ? ALL_WHATSAPP_REVIEWS[activeScreenshotIndex] : null;
+
+  // Responsive visible cards count
+  React.useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 640) setVisibleCards(1);
+      else if (window.innerWidth < 1024) setVisibleCards(2);
+      else setVisibleCards(4);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Auto-slide every 2 seconds
+  React.useEffect(() => {
+    if (isPaused || activeScreenshotIndex !== null) return;
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => prev + 1);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, [isPaused, activeScreenshotIndex]);
+
+  // Seamless infinite loop handling
+  const totalReviews = ALL_WHATSAPP_REVIEWS.length;
+  React.useEffect(() => {
+    if (currentIndex >= totalReviews) {
+      const resetTimer = setTimeout(() => {
+        setIsTransitioning(false);
+        setCurrentIndex(0);
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            setIsTransitioning(true);
+          });
+        });
+      }, 500);
+      return () => clearTimeout(resetTimer);
+    }
+  }, [currentIndex, totalReviews]);
+
+  // Keyboard navigation for screenshot lightbox
+  React.useEffect(() => {
+    if (activeScreenshotIndex === null) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setActiveScreenshotIndex(null);
+      if (e.key === 'ArrowLeft') {
+        setActiveScreenshotIndex((prev) => (prev !== null && prev > 0 ? prev - 1 : totalReviews - 1));
+      }
+      if (e.key === 'ArrowRight') {
+        setActiveScreenshotIndex((prev) => (prev !== null && prev < totalReviews - 1 ? prev + 1 : 0));
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [activeScreenshotIndex, totalReviews]);
+
+
 
   // In-page Syllabus modal state
   const [selectedSyllabus, setSelectedSyllabus] = useState<Course | null>(null);
@@ -246,18 +309,18 @@ export const HomePage: React.FC = () => {
                 <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-50 text-[#2563EB] border border-blue-100 group-hover:bg-[#2563EB] group-hover:text-white transition-all shadow-2xs">
                   <Cloud className="h-5 w-5" />
                 </div>
-                <span className="text-[10px] font-mono font-semibold text-[#626B78] bg-[#F7F9FC] border border-[#E5E9F0] px-2 py-0.5 rounded-md">
-                  Core Track
+                <span className="text-[10px] font-mono font-semibold text-[#2563EB] bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-md">
+                  THADAM 75 • 3 Phases
                 </span>
               </div>
               <h3 className="text-base font-bold text-[#151922] group-hover:text-[#2563EB] transition-colors">
-                AI-Powered AWS DevOps
+                THADAM 75: AI-Powered AWS DevOps
               </h3>
               <p className="mt-1.5 text-xs text-[#626B78] leading-relaxed">
-                AWS architecture, Amazon Q Developer, Kubernetes EKS, Terraform IaC, and automated GitHub Actions.
+                75-Day journey: Linux, AWS, Terraform, Docker, Kubernetes EKS, GitOps, DevSecOps, AIOps & Bedrock AI Agents.
               </p>
               <div className="mt-4 pt-3 border-t border-[#E5E9F0] flex items-center justify-between text-[11px] font-bold text-[#2563EB]">
-                <span>Inspect Syllabus Outline</span>
+                <span>Inspect 75-Day Syllabus</span>
                 <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
               </div>
             </motion.div>
@@ -276,18 +339,18 @@ export const HomePage: React.FC = () => {
                 <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600 border border-emerald-100 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-2xs">
                   <GitMerge className="h-5 w-5" />
                 </div>
-                <span className="text-[10px] font-mono font-semibold text-[#626B78] bg-[#F7F9FC] border border-[#E5E9F0] px-2 py-0.5 rounded-md">
-                  Core Track
+                <span className="text-[10px] font-mono font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md">
+                  THADAM 75 • 3 Phases
                 </span>
               </div>
               <h3 className="text-base font-bold text-[#151922] group-hover:text-emerald-600 transition-colors">
-                AI-Powered Azure DevOps
+                THADAM 75: AI-Powered Azure DevOps
               </h3>
               <p className="mt-1.5 text-xs text-[#626B78] leading-relaxed">
-                Azure VNets & AKS, GitHub Copilot integration, multi-stage Azure Pipelines, and Terraform/Bicep IaC.
+                75-Day journey: Linux, Python, Azure, Terraform, Docker, AKS, GitOps, DevSecOps, AIOps & Azure AI Agents.
               </p>
               <div className="mt-4 pt-3 border-t border-[#E5E9F0] flex items-center justify-between text-[11px] font-bold text-emerald-600">
-                <span>Inspect Syllabus Outline</span>
+                <span>Inspect 75-Day Syllabus</span>
                 <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
               </div>
             </motion.div>
@@ -330,8 +393,11 @@ export const HomePage: React.FC = () => {
       {/* =========================================================================
           2. COURSES SECTION (#courses)
          ========================================================================= */}
-      <section id="courses" className="relative border-b border-[#E5E9F0] bg-[#F7F9FC] py-16 lg:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section id="courses" className="relative border-b border-[#E5E9F0] bg-[#F7F9FC] py-16 lg:py-24 overflow-hidden">
+        {/* Simple Technology & AI Margin Sketches */}
+        <SectionMarginSketches variant="courses" />
+
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -384,7 +450,8 @@ export const HomePage: React.FC = () => {
       {/* =========================================================================
           3. WHY CHOOSE 6F IT SCHOOL (#why-us)
          ========================================================================= */}
-      <section id="why-us" className="relative border-b border-[#E5E9F0] bg-white py-16 lg:py-24">
+      <section id="why-us" className="relative border-b border-[#E5E9F0] bg-white py-16 lg:py-24 overflow-hidden">
+        <SectionMarginSketches variant="why-us" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -414,6 +481,7 @@ export const HomePage: React.FC = () => {
           4. LEARNING JOURNEY (#journey) - Flight Path Roadmap Matching Reference
          ========================================================================= */}
       <section id="journey" className="relative border-b border-[#E5E9F0] bg-white py-16 lg:py-24 overflow-hidden">
+        <SectionMarginSketches variant="why-us" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -443,6 +511,7 @@ export const HomePage: React.FC = () => {
           5. TECHNOLOGY SHOWCASE (#technologies) - Exact Carousel Matching Reference
          ========================================================================= */}
       <section id="technologies" className="relative border-b border-[#E5E9F0] bg-white py-16 lg:py-24 overflow-hidden">
+        <SectionMarginSketches variant="technologies" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -471,7 +540,8 @@ export const HomePage: React.FC = () => {
       {/* =========================================================================
           6. STUDENT PROJECTS SHOWCASE (#projects)
          ========================================================================= */}
-      <section id="projects" className="relative border-b border-[#E5E9F0] bg-[#F7F9FC] py-16 lg:py-24">
+      <section id="projects" className="relative border-b border-[#E5E9F0] bg-[#F7F9FC] py-16 lg:py-24 overflow-hidden">
+        <SectionMarginSketches variant="projects" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -538,6 +608,7 @@ export const HomePage: React.FC = () => {
           7. STUDENT SUCCESS & OUTCOMES (#student-success)
          ========================================================================= */}
       <section id="student-success" className="relative border-b border-[#E5E9F0] bg-white py-16 lg:py-24 overflow-hidden">
+        <SectionMarginSketches variant="student-success" />
         {/* Ambient animated floating gradient glow blobs */}
         <motion.div
           animate={{
@@ -567,14 +638,8 @@ export const HomePage: React.FC = () => {
         />
 
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          {/* Centered Header matching reference design */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.5 }}
-            className="text-center max-w-2xl mx-auto mb-14"
-          >
+          {/* Centered / Clean Header without status pill */}
+          <div className="max-w-2xl text-left mb-8">
             <div className="inline-flex items-center gap-1.5 rounded-full bg-[#2563EB]/10 px-3.5 py-1 text-xs font-bold text-[#2563EB] mb-3">
               <Award className="h-3.5 w-3.5" />
               <span>Student Success Stories</span>
@@ -582,181 +647,120 @@ export const HomePage: React.FC = () => {
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#151922]">
               Real Student Transformations
             </h2>
-            <p className="mt-3 text-sm sm:text-base text-[#626B78] leading-relaxed max-w-lg mx-auto">
-              See how practicing learners completed guided cloud labs, deployed production capstones, and transitioned into engineering roles.
+            <p className="mt-2 text-sm sm:text-base text-[#626B78] leading-relaxed">
+              Authentic WhatsApp chats and signed offer letters from practicing 6F learners placed in top tech companies.
             </p>
-          </motion.div>
+          </div>
 
-          {/* 4 Compact Animated Blob Testimonial Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-5 xl:gap-6 pt-10 pb-12">
-            {SUCCESS_STORIES.slice(0, 4).map((story, idx) => {
-              // Vibrant gradients for the 4 animated blobs
-              const bgGradients = [
-                'bg-gradient-to-br from-[#0284C7] to-[#0369A1] shadow-blue-500/25',
-                'bg-gradient-to-br from-[#10B981] to-[#059669] shadow-emerald-500/25',
-                'bg-gradient-to-br from-[#0D9488] to-[#0F766E] shadow-teal-500/25',
-                'bg-gradient-to-br from-[#6366F1] to-[#8B5CF6] shadow-indigo-500/25',
-              ];
+          {/* =========================================================================
+              Auto-Sliding Carousel with Side Arrows (Slides every 2s)
+             ========================================================================= */}
+          <div className="relative w-full group/carousel">
+            {/* Left Navigation Arrow (Positioned on the Left Side of Cards) */}
+            <button
+              type="button"
+              onClick={() => setCurrentIndex((prev) => (prev > 0 ? prev - 1 : totalReviews - 1))}
+              className="absolute -left-3 sm:-left-5 lg:-left-6 top-1/2 -translate-y-1/2 z-30 flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-white/95 backdrop-blur-md border border-slate-200/90 shadow-xl text-slate-700 hover:text-[#2563EB] hover:bg-white hover:scale-110 active:scale-95 transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
+              aria-label="Previous slide"
+              title="Previous reviews"
+            >
+              <ChevronLeft className="h-6 w-6" />
+            </button>
 
-              const bgClass = bgGradients[idx % bgGradients.length];
+            {/* Right Navigation Arrow (Positioned on the Right Side of Cards) */}
+            <button
+              type="button"
+              onClick={() => setCurrentIndex((prev) => prev + 1)}
+              className="absolute -right-3 sm:-right-5 lg:-right-6 top-1/2 -translate-y-1/2 z-30 flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-white/95 backdrop-blur-md border border-slate-200/90 shadow-xl text-slate-700 hover:text-[#2563EB] hover:bg-white hover:scale-110 active:scale-95 transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
+              aria-label="Next slide"
+              title="Next reviews"
+            >
+              <ChevronRight className="h-6 w-6" />
+            </button>
 
-              return (
-                <motion.div
-                  key={story.id}
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-40px' }}
-                  transition={{ duration: 0.45, delay: idx * 0.1 }}
-                  whileHover={{ y: -8, transition: { duration: 0.25 } }}
-                  className="group relative flex flex-col items-center pt-8"
-                >
-                  {/* Animated Morphing Blob Background Shape */}
-                  <motion.div
-                    animate={{
-                      rotate: idx % 2 === 0 ? [-6, 3, -6] : [6, -3, 6],
-                      scale: [1, 1.03, 0.98, 1],
-                      borderRadius: [
-                        '28px 18px 32px 16px',
-                        '18px 32px 16px 28px',
-                        '32px 16px 28px 18px',
-                        '28px 18px 32px 16px',
-                      ],
-                    }}
-                    transition={{
-                      duration: 5.5 + idx * 0.8,
-                      repeat: Infinity,
-                      ease: 'easeInOut',
-                    }}
-                    className={`absolute inset-0 ${bgClass} shadow-lg opacity-95 transition-all pointer-events-none`}
-                  />
+            {/* Carousel Viewport Container */}
+            <div
+              className="w-full overflow-hidden pt-4 pb-12 cursor-grab active:cursor-grabbing"
+              onMouseEnter={() => setIsPaused(true)}
+              onMouseLeave={() => setIsPaused(false)}
+              onTouchStart={() => setIsPaused(true)}
+              onTouchEnd={() => setIsPaused(false)}
+            >
+            <div
+              className="flex"
+              style={{
+                transform: `translateX(-${currentIndex * (100 / visibleCards)}%)`,
+                transition: isTransitioning ? 'transform 500ms ease-in-out' : 'none',
+              }}
+            >
+              {[...ALL_WHATSAPP_REVIEWS, ...ALL_WHATSAPP_REVIEWS].map((rev, idx) => {
+                const bgGradients = [
+                  'bg-gradient-to-br from-[#0284C7] to-[#0369A1] shadow-blue-500/25',
+                  'bg-gradient-to-br from-[#10B981] to-[#059669] shadow-emerald-500/25',
+                  'bg-gradient-to-br from-[#0D9488] to-[#0F766E] shadow-teal-500/25',
+                  'bg-gradient-to-br from-[#6366F1] to-[#8B5CF6] shadow-indigo-500/25',
+                ];
+                const bgClass = bgGradients[idx % bgGradients.length];
 
-                  {/* Front White Card - Dedicated WhatsApp Screenshot Showcase */}
-                  <div className="relative z-10 w-full rounded-[24px] sm:rounded-[26px] bg-white p-4.5 sm:p-5 text-left shadow-xl shadow-slate-200/80 border border-slate-100 flex flex-col justify-between min-h-[420px] sm:min-h-[430px]">
-                    <div>
-                      {/* Top Header: WhatsApp Green Badge & Student Name */}
-                      <div className="flex items-center justify-between mb-2.5">
-                        <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 border border-emerald-200/80 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700 shadow-2xs">
-                          <MessageCircle className="h-3 w-3 text-emerald-600 fill-emerald-600" />
-                          <span>WhatsApp Chat</span>
-                        </span>
-                        <span className="text-[10px] font-mono font-bold text-slate-400">
-                          {story.chatTime?.split(',')[0] || 'Verified'}
-                        </span>
-                      </div>
-
-                      <div className="mb-3">
-                        <h3 className="text-base font-extrabold text-[#151922] tracking-tight">
-                          {story.name}
-                        </h3>
-                        <p className="text-[11px] font-semibold text-emerald-700">
-                          {story.placementOffer}
-                        </p>
-                      </div>
-
-                      {/* WhatsApp Screenshot Container with Zoom on Click */}
+                return (
+                  <div
+                    key={`${rev.id}-${idx}`}
+                    style={{ width: `${100 / visibleCards}%` }}
+                    className="shrink-0 px-2 sm:px-3"
+                  >
+                    <motion.div
+                      whileHover={{ y: -8, transition: { duration: 0.25 } }}
+                      className="group relative flex flex-col items-center pt-6"
+                    >
+                      {/* Animated Morphing Blob Background Shape */}
                       <div
-                        onClick={() => setActiveScreenshot(story)}
-                        className="group/screenshot relative w-full rounded-2xl overflow-hidden border border-slate-200/90 shadow-sm cursor-pointer transition-all duration-200 hover:border-emerald-500 hover:shadow-md"
+                        className={`absolute inset-0 ${bgClass} shadow-lg opacity-95 transition-all pointer-events-none`}
+                        style={{
+                          borderRadius:
+                            idx % 2 === 0
+                              ? '28px 18px 32px 16px'
+                              : '18px 32px 16px 28px',
+                          transform: idx % 2 === 0 ? 'rotate(-2.5deg)' : 'rotate(2.5deg)',
+                        }}
+                      />
+
+                      {/* Front White Card - Clean WhatsApp Screenshot Only */}
+                      <div
+                        onClick={() => setActiveScreenshotIndex(idx % totalReviews)}
+                        className="relative z-10 w-full rounded-[24px] sm:rounded-[26px] bg-white p-2.5 sm:p-3 text-left shadow-xl shadow-slate-200/80 border border-slate-100 cursor-pointer overflow-hidden group/screenshot"
                       >
-                        {story.whatsappScreenshotUrl ? (
-                          <div className="relative aspect-[4/5] w-full overflow-hidden bg-slate-100">
-                            <img
-                              src={story.whatsappScreenshotUrl}
-                              alt={`WhatsApp feedback from ${story.name}`}
-                              className="h-full w-full object-cover group-hover/screenshot:scale-105 transition-transform duration-300"
-                            />
+                        <div className="relative aspect-[9/16] w-full overflow-hidden rounded-[18px] sm:rounded-[20px] bg-slate-950">
+                          <img
+                            src={rev.image}
+                            alt={rev.name}
+                            className="h-full w-full object-cover object-top group-hover/screenshot:scale-105 transition-transform duration-300"
+                            loading="lazy"
+                          />
+
+                          {/* Hover Zoom Overlay */}
+                          <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover/screenshot:opacity-100 transition-opacity duration-200 flex items-center justify-center backdrop-blur-2xs">
+                            <span className="inline-flex items-center gap-1.5 rounded-xl bg-white/95 px-3 py-1.5 text-xs font-bold text-slate-900 shadow-lg">
+                              <ZoomIn className="h-3.5 w-3.5 text-emerald-600" />
+                              <span>View Full Chat</span>
+                            </span>
                           </div>
-                        ) : (
-                          /* Authentic WhatsApp Chat Screenshot Mockup */
-                          <div className="relative w-full rounded-2xl overflow-hidden bg-[#ECE5DD] border border-slate-200/60 flex flex-col justify-between min-h-[210px] sm:min-h-[220px]">
-                            {/* WhatsApp Chat App Bar */}
-                            <div className="bg-[#075E54] px-3 py-2 text-white flex items-center justify-between">
-                              <div className="flex items-center gap-2">
-                                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-600 text-white font-bold text-[10px]">
-                                  {story.studentInitials}
-                                </div>
-                                <div>
-                                  <span className="text-xs font-bold text-white block leading-tight">
-                                    {story.name}
-                                  </span>
-                                  <span className="text-[9px] text-emerald-200 block leading-none">
-                                    online
-                                  </span>
-                                </div>
-                              </div>
-                              <span className="flex h-2 w-2 rounded-full bg-emerald-400" />
-                            </div>
-
-                            {/* WhatsApp Message Bubble Area */}
-                            <div className="p-3 space-y-2 flex-1 flex flex-col justify-center">
-                              {/* Date pill */}
-                              <div className="text-center">
-                                <span className="rounded-md bg-white/70 px-2 py-0.5 text-[9px] font-semibold text-slate-500 uppercase tracking-wide shadow-2xs">
-                                  Today
-                                </span>
-                              </div>
-
-                              {/* Student Incoming WhatsApp Bubble */}
-                              <div className="relative max-w-[92%] ml-auto bg-[#D9FDD3] p-2.5 rounded-xl rounded-tr-xs shadow-2xs border border-emerald-100">
-                                <p className="text-[11px] text-[#111B21] leading-relaxed font-normal">
-                                  {story.chatSnippet}
-                                </p>
-                                <div className="mt-1 flex items-center justify-end gap-1 text-[9px] text-[#667781]">
-                                  <span>{story.chatTime?.split(',')[1] || '11:42 AM'}</span>
-                                  <CheckCheck className="h-3 w-3 text-[#53BDEB]" />
-                                </div>
-                              </div>
-                            </div>
-
-                            {/* Verification Footer Bar in Screenshot */}
-                            <div className="bg-white/80 backdrop-blur-xs px-3 py-1.5 border-t border-slate-200/50 flex items-center justify-between text-[10px] text-slate-600 font-medium">
-                              <span className="flex items-center gap-1 text-emerald-700 font-bold">
-                                <CheckCircle2 className="h-3 w-3 text-emerald-600" />
-                                Verified Offer
-                              </span>
-                              <span className="text-[9px] font-mono text-slate-400">
-                                6F IT School
-                              </span>
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Hover Overlay: Click to View Full Screenshot */}
-                        <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover/screenshot:opacity-100 transition-opacity duration-200 flex items-center justify-center backdrop-blur-2xs">
-                          <span className="inline-flex items-center gap-1.5 rounded-xl bg-white/95 px-3 py-1.5 text-xs font-bold text-slate-900 shadow-lg">
-                            <ZoomIn className="h-3.5 w-3.5 text-emerald-600" />
-                            <span>View Full Screenshot</span>
-                          </span>
                         </div>
                       </div>
-                    </div>
-
-                    {/* Bottom Course Completed & Syllabus Link */}
-                    <div className="mt-3 pt-3 border-t border-[#E5E9F0]/80 w-full flex flex-col items-center gap-1.5 text-center">
-                      <span className="rounded-full bg-[#F7F9FC] border border-[#E5E9F0] px-2.5 py-0.5 text-[10px] font-bold text-[#151922] truncate max-w-full">
-                        {story.courseCompleted}
-                      </span>
-
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const course = COURSES.find((c) => c.slug === story.courseSlug);
-                          if (course) setSelectedSyllabus(course);
-                        }}
-                        className="text-[10px] sm:text-[11px] font-bold text-[#2563EB] hover:text-[#1D4ED8] transition-colors cursor-pointer"
-                      >
-                        View Syllabus &rarr;
-                      </button>
-                    </div>
-
-                    {/* Bottom Floating Golden Star Badge */}
-                    <div className="absolute -bottom-4.5 left-1/2 -translate-x-1/2 z-20 flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full bg-white shadow-lg border border-slate-100 text-amber-400 group-hover:scale-110 transition-transform duration-300">
-                      <Star className="h-4 w-4 sm:h-4.5 sm:w-4.5 fill-amber-400 text-amber-400" />
-                    </div>
+                    </motion.div>
                   </div>
-                </motion.div>
-              );
-            })}
+                );
+              })}
+            </div>
+          </div>
+
+          </div>
+
+          {/* Quick Click Hint */}
+          <div className="text-center -mt-4 mb-8">
+            <span className="text-xs text-slate-500 font-medium bg-slate-50 border border-slate-200 rounded-full px-4 py-1.5 inline-flex items-center gap-1.5">
+              <ZoomIn className="h-3.5 w-3.5 text-blue-600" />
+              <span>Click on any screenshot to view the full resolution chat & verified offer letter</span>
+            </span>
           </div>
 
           {/* =========================================================================
@@ -848,7 +852,8 @@ export const HomePage: React.FC = () => {
       {/* =========================================================================
           8. ABOUT US SECTION (#about) - Exact Content Matching Specification
          ========================================================================= */}
-      <section id="about" className="relative border-b border-[#E5E9F0] bg-[#F7F9FC] py-16 lg:py-24">
+      <section id="about" className="relative border-b border-[#E5E9F0] bg-[#F7F9FC] py-16 lg:py-24 overflow-hidden">
+        <SectionMarginSketches variant="about-contact" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-left">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -979,7 +984,8 @@ export const HomePage: React.FC = () => {
       {/* =========================================================================
           9. CONTACT US & ENQUIRY (#contact)
          ========================================================================= */}
-      <section id="contact" className="relative border-b border-[#E5E9F0] bg-white py-16 lg:py-24">
+      <section id="contact" className="relative border-b border-[#E5E9F0] bg-white py-16 lg:py-24 overflow-hidden">
+        <SectionMarginSketches variant="about-contact" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-left">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -1215,103 +1221,107 @@ export const HomePage: React.FC = () => {
 
       {/* WhatsApp Screenshot Lightbox Modal */}
       <AnimatePresence>
-        {activeScreenshot && (
+        {activeScreenshot && activeScreenshotIndex !== null && (
           <div
             role="dialog"
             aria-modal="true"
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/75 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-sm"
           >
-            <div className="fixed inset-0" onClick={() => setActiveScreenshot(null)} aria-hidden="true" />
+            <div className="fixed inset-0" onClick={() => setActiveScreenshotIndex(null)} aria-hidden="true" />
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 16 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 16 }}
-              className="relative z-10 w-full max-w-lg rounded-3xl bg-white shadow-2xl border border-slate-200 overflow-hidden text-left"
+              className="relative z-10 w-full max-w-xl max-h-[92vh] flex flex-col rounded-3xl bg-white shadow-2xl border border-slate-200 overflow-hidden text-left"
             >
               {/* WhatsApp App Bar */}
-              <div className="flex items-center justify-between bg-[#075E54] px-5 py-3.5 text-white">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-600 text-white font-bold text-sm">
-                    {activeScreenshot.studentInitials}
+              <div className="flex items-center justify-between bg-[#075E54] px-4 sm:px-5 py-3 text-white shrink-0">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-white font-bold text-sm">
+                    {activeScreenshot.name.split(' ').map((n) => n[0]).join('.')}
                   </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-white flex items-center gap-1.5">
-                      {activeScreenshot.name}
-                      <CheckCircle2 className="h-3.5 w-3.5 text-emerald-300" />
+                  <div className="min-w-0">
+                    <h4 className="text-sm font-bold text-white flex items-center gap-1.5 truncate">
+                      <span>{activeScreenshot.name}</span>
+                      <CheckCircle2 className="h-3.5 w-3.5 text-emerald-300 shrink-0" />
                     </h4>
-                    <span className="text-[11px] text-emerald-100/90 block">
-                      {activeScreenshot.placementOffer || activeScreenshot.targetRole}
+                    <span className="text-[11px] text-emerald-100/90 block truncate">
+                      {activeScreenshot.packageOrHike} • {activeScreenshot.company}
                     </span>
                   </div>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setActiveScreenshot(null)}
-                  className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
-                  aria-label="Close modal"
-                >
-                  <X className="h-5 w-5" />
-                </button>
+
+                {/* Navigation and Close */}
+                <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+                  <div className="hidden sm:flex items-center bg-black/20 rounded-full px-2.5 py-1 text-[11px] font-mono text-emerald-100">
+                    {activeScreenshotIndex + 1} / {ALL_WHATSAPP_REVIEWS.length}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setActiveScreenshotIndex(
+                        activeScreenshotIndex > 0 ? activeScreenshotIndex - 1 : ALL_WHATSAPP_REVIEWS.length - 1
+                      )
+                    }
+                    className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
+                    aria-label="Previous screenshot"
+                    title="Previous"
+                  >
+                    <ChevronLeft className="h-5 w-5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setActiveScreenshotIndex(
+                        activeScreenshotIndex < ALL_WHATSAPP_REVIEWS.length - 1 ? activeScreenshotIndex + 1 : 0
+                      )
+                    }
+                    className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
+                    aria-label="Next screenshot"
+                    title="Next"
+                  >
+                    <ChevronRight className="h-5 w-5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setActiveScreenshotIndex(null)}
+                    className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer ml-1"
+                    aria-label="Close modal"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                </div>
               </div>
 
               {/* Chat Viewport / Screenshot in Lightbox */}
-              <div className="p-5 sm:p-6 bg-[#EFEAE2] min-h-[340px] flex flex-col justify-between">
-                {activeScreenshot.whatsappScreenshotUrl ? (
+              <div className="p-3 sm:p-5 bg-slate-100/80 overflow-y-auto flex-1 flex flex-col items-center">
+                <div className="relative w-full flex justify-center">
                   <img
-                    src={activeScreenshot.whatsappScreenshotUrl}
+                    src={activeScreenshot.image}
                     alt={`WhatsApp Feedback from ${activeScreenshot.name}`}
-                    className="w-full h-auto rounded-2xl shadow-md border border-slate-300"
+                    className="max-h-[66vh] w-auto max-w-full rounded-2xl shadow-xl border border-slate-300/80 object-contain"
                   />
-                ) : (
-                  <div className="space-y-4">
-                    <div className="flex justify-center">
-                      <span className="rounded-lg bg-white/80 backdrop-blur-xs px-3 py-1 text-[10px] font-bold text-slate-500 uppercase tracking-wider shadow-2xs">
-                        Verified WhatsApp Placement Message
-                      </span>
-                    </div>
-
-                    {/* Chat Bubble */}
-                    <div className="relative max-w-sm ml-auto bg-[#D9FDD3] p-4 rounded-2xl rounded-tr-xs shadow-sm border border-emerald-200/50">
-                      <p className="text-sm text-[#111B21] leading-relaxed font-normal">
-                        {activeScreenshot.chatSnippet}
-                      </p>
-                      <div className="mt-2 flex items-center justify-end gap-1.5 text-[11px] text-[#667781]">
-                        <span>{activeScreenshot.chatTime}</span>
-                        <CheckCheck className="h-4 w-4 text-[#53BDEB]" />
-                      </div>
-                    </div>
-
-                    {/* Course & Outcome Tag */}
-                    <div className="rounded-2xl border border-emerald-200 bg-white p-3.5 shadow-2xs flex items-center justify-between">
-                      <div>
-                        <span className="text-[10px] font-mono font-bold text-emerald-700 uppercase block">
-                          Program Completed
-                        </span>
-                        <span className="text-xs font-bold text-[#151922]">
-                          {activeScreenshot.courseCompleted}
-                        </span>
-                      </div>
-                      <span className="rounded-full bg-emerald-50 border border-emerald-200 px-3 py-1 text-xs font-bold text-emerald-700">
-                        {activeScreenshot.placementOffer}
-                      </span>
-                    </div>
-                  </div>
-                )}
+                </div>
               </div>
 
               {/* Modal Footer */}
-              <div className="p-4 bg-white border-t border-slate-100 flex items-center justify-between">
-                <span className="text-xs text-slate-500 font-medium">
-                  Verified student feedback • 6F IT School
-                </span>
+              <div className="p-3.5 sm:p-4 bg-white border-t border-slate-100 flex items-center justify-between shrink-0">
+                <div className="text-left">
+                  <span className="text-[11px] font-bold text-slate-800 block">
+                    {activeScreenshot.packageOrHike}
+                  </span>
+                  <span className="text-[10px] text-slate-500 font-medium">
+                    Verified WhatsApp Offer • 6F IT School
+                  </span>
+                </div>
                 <button
                   type="button"
                   onClick={() => {
                     const course = COURSES.find((c) => c.slug === activeScreenshot.courseSlug);
-                    setActiveScreenshot(null);
+                    setActiveScreenshotIndex(null);
                     if (course) setSelectedSyllabus(course);
                   }}
-                  className="rounded-xl bg-[#2563EB] text-white px-4 py-2 text-xs font-bold hover:bg-[#1D4ED8] transition-colors cursor-pointer"
+                  className="rounded-xl bg-[#2563EB] text-white px-3.5 py-1.5 text-xs font-bold hover:bg-[#1D4ED8] transition-colors cursor-pointer"
                 >
                   View Course Syllabus &rarr;
                 </button>

@@ -39,6 +39,14 @@ export interface Course {
   }[];
   isProvisionalCurriculum?: boolean;
   provisionalNotice?: string;
+  trainingDays?: number;
+  corePhases?: number;
+  projectCount?: string;
+  preparedBy?: string;
+  learningModel?: string;
+  curriculumJourney?: string[];
+  tagline?: string;
+  programType?: string;
 }
 
 export interface TechnologyItem {

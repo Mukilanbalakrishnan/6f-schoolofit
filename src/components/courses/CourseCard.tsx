@@ -14,18 +14,19 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course, onViewSyllabus }
   const { openEnquiryModal } = useEnquiry();
 
   const renderIcon = () => {
+    const iconClass = "h-5 w-5 text-[#2563EB] group-hover:text-white transition-colors duration-200";
     switch (course.category) {
       case 'Cloud':
       case 'AWS DevOps':
-        return <Cloud className="h-5 w-5 text-[#2563EB]" />;
+        return <Cloud className={iconClass} />;
       case 'DevOps':
       case 'Azure DevOps':
-        return <GitMerge className="h-5 w-5 text-[#2563EB]" />;
+        return <GitMerge className={iconClass} />;
       case 'AI & Automation':
       case 'AIOps':
-        return <Bot className="h-5 w-5 text-[#2563EB]" />;
+        return <Bot className={iconClass} />;
       default:
-        return <Cloud className="h-5 w-5 text-[#2563EB]" />;
+        return <Cloud className={iconClass} />;
     }
   };
 

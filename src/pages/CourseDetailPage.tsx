@@ -131,6 +131,18 @@ export const CourseDetailPage: React.FC = () => {
                   <span>Track Focus:</span>
                   <strong className="text-[#151922] font-bold">{course.category}</strong>
                 </li>
+                {course.trainingDays && (
+                  <li className="flex items-center justify-between py-1 border-b border-[#E5E9F0]">
+                    <span>Curriculum Duration:</span>
+                    <strong className="text-[#2563EB] font-bold">{course.trainingDays} Training Days ({course.corePhases || 3} Phases)</strong>
+                  </li>
+                )}
+                {course.projectCount && (
+                  <li className="flex items-center justify-between py-1 border-b border-[#E5E9F0]">
+                    <span>Hands-on Projects:</span>
+                    <strong className="text-emerald-600 font-bold">{course.projectCount}</strong>
+                  </li>
+                )}
                 <li className="flex items-center justify-between py-1 border-b border-[#E5E9F0]">
                   <span>Delivery Format:</span>
                   <strong className="text-[#151922] font-bold">{course.deliveryMode}</strong>
@@ -156,6 +168,104 @@ export const CourseDetailPage: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* THADAM 75 / FLAGSHIP PROGRAM HIGHLIGHT STRIP */}
+      {course.trainingDays && (
+        <section className="border-b border-[#E5E9F0] bg-[#0F172A] text-white py-12 relative overflow-hidden">
+          <div className="absolute top-0 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+
+          <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 pb-8 border-b border-slate-800">
+              <div>
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 px-3.5 py-1 text-xs font-mono font-bold text-blue-300 uppercase tracking-wider mb-3">
+                  <Sparkles className="h-3.5 w-3.5 text-blue-400" />
+                  <span>{course.programType || 'Professional Certificate Program'}</span>
+                </span>
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight">
+                  {course.title}
+                </h2>
+                <p className="mt-2 text-sm sm:text-base text-slate-300 italic font-medium">
+                  "{course.tagline || 'Every person deserves a great career. We help you earn it.'}"
+                </p>
+              </div>
+
+              {course.preparedBy && (
+                <div className="rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 p-4 text-left shrink-0 sm:min-w-[260px]">
+                  <span className="text-[10px] uppercase font-mono text-slate-400 tracking-wider block">Prepared By</span>
+                  <span className="text-base font-bold text-white block mt-0.5">{course.preparedBy}</span>
+                  <span className="text-xs text-blue-400 font-semibold block mt-0.5">6F School of IT</span>
+                  <span className="text-[11px] text-slate-400 block mt-1">75-Day Industry-Ready Career Curriculum</span>
+                </div>
+              )}
+            </div>
+
+            {/* 4 Stats Cards */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
+              <div className="rounded-2xl bg-slate-800/60 border border-slate-700/80 p-5 text-center">
+                <span className="text-3xl sm:text-4xl font-extrabold text-blue-400 block font-mono">{course.trainingDays}</span>
+                <span className="text-xs uppercase font-bold text-slate-300 tracking-wider mt-1 block">Training Days</span>
+              </div>
+              <div className="rounded-2xl bg-slate-800/60 border border-slate-700/80 p-5 text-center">
+                <span className="text-3xl sm:text-4xl font-extrabold text-emerald-400 block font-mono">{course.corePhases || 3}</span>
+                <span className="text-xs uppercase font-bold text-slate-300 tracking-wider mt-1 block">Core Phases</span>
+              </div>
+              <div className="rounded-2xl bg-slate-800/60 border border-slate-700/80 p-5 text-center">
+                <span className="text-3xl sm:text-4xl font-extrabold text-amber-400 block font-mono">{course.projectCount || '10+'}</span>
+                <span className="text-xs uppercase font-bold text-slate-300 tracking-wider mt-1 block">Industry Projects</span>
+              </div>
+              <div className="rounded-2xl bg-slate-800/60 border border-slate-700/80 p-5 text-center">
+                <span className="text-3xl sm:text-4xl font-extrabold text-purple-400 block font-mono">AI</span>
+                <span className="text-xs uppercase font-bold text-slate-300 tracking-wider mt-1 block">Powered DevOps</span>
+              </div>
+            </div>
+
+            {/* Curriculum Journey Flow */}
+            {course.curriculumJourney && course.curriculumJourney.length > 0 && (
+              <div className="mt-8 rounded-2xl bg-slate-800/60 border border-slate-700/80 p-5 sm:p-6 text-left">
+                <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 block mb-3 font-semibold">
+                  Curriculum Journey
+                </span>
+                <div className="flex flex-wrap items-center gap-2">
+                  {course.curriculumJourney.map((step, idx, arr) => (
+                    <React.Fragment key={step}>
+                      <span className="rounded-lg bg-blue-500/20 border border-blue-400/30 px-3 py-1.5 text-xs font-bold text-blue-200">
+                        {step}
+                      </span>
+                      {idx < arr.length - 1 && (
+                        <span className="text-slate-500 font-bold text-sm px-1">→</span>
+                      )}
+                    </React.Fragment>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Learning Model & Who It's For Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 text-left">
+              {course.learningModel && (
+                <div className="rounded-2xl bg-slate-800/60 border border-slate-700/80 p-5">
+                  <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 block mb-1.5 font-semibold">
+                    Learning Model
+                  </span>
+                  <p className="text-xs sm:text-sm font-bold text-emerald-300 leading-relaxed">
+                    {course.learningModel}
+                  </p>
+                </div>
+              )}
+
+              <div className="rounded-2xl bg-slate-800/60 border border-slate-700/80 p-5">
+                <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 block mb-1.5 font-semibold">
+                  Who It's For
+                </span>
+                <p className="text-xs sm:text-sm font-bold text-slate-200 leading-relaxed">
+                  IT Professionals · Non-IT Professionals · Freshers · Career Switchers
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* 2. COURSE OVERVIEW */}
       <section className="border-b border-[#E5E9F0] py-12 lg:py-16 bg-white">

@@ -37,19 +37,14 @@ export const Footer: React.FC = () => {
             <a
               href="#home"
               onClick={(e) => handleScrollTo('home', e)}
-              className="flex items-center gap-2.5 cursor-pointer"
+              className="inline-block cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#2563EB] rounded-md"
+              aria-label="6F School of IT Homepage"
             >
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#2563EB] text-white font-bold text-base">
-                6F
-              </div>
-              <div className="flex flex-col">
-                <span className="text-base font-bold tracking-tight text-[#151922]">
-                  6F IT School
-                </span>
-                <span className="text-[10px] font-semibold tracking-wider text-[#626B78] uppercase">
-                  Technology Academy
-                </span>
-              </div>
+              <img
+                src="/1-no-bg.svg"
+                alt="6F School of IT"
+                className="h-11 sm:h-12 w-auto object-contain"
+              />
             </a>
             <p className="text-xs text-[#626B78] leading-relaxed max-w-sm">
               Hands-on, project-based technology training in AI-Powered AWS DevOps, Azure DevOps, and AIOps.

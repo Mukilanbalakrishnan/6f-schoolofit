@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import type { Course } from '../../types';
 import { SyllabusAccordion } from './SyllabusAccordion';
 import { useEnquiry } from '../../context/EnquiryContext';
-import { X, Clock, Layers, CheckCircle2, ArrowUpRight, BookOpen } from 'lucide-react';
+import { X, Clock, Layers, CheckCircle2, ArrowUpRight, BookOpen, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 interface SyllabusModalProps {
@@ -96,23 +96,67 @@ export const SyllabusModal: React.FC<SyllabusModalProps> = ({
             </div>
 
             {/* Quick Specs Strip */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 border-b border-[#E5E9F0] bg-[#F7F9FC]/60 px-5 sm:px-6 py-3 text-xs">
-              <div className="flex items-center gap-2">
-                <Clock className="h-4 w-4 text-[#2563EB]" />
-                <span className="text-[#626B78]">Curriculum: <strong className="text-[#151922]">{course.syllabus.length} Lab Modules</strong></span>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 border-b border-[#E5E9F0] bg-[#F7F9FC]/60 px-5 sm:px-6 py-3 text-xs">
+              <div className="flex items-center gap-1.5">
+                <Clock className="h-4 w-4 text-[#2563EB] shrink-0" />
+                <span className="text-[#626B78]">Duration: <strong className="text-[#151922]">{course.trainingDays ? `${course.trainingDays} Days` : `${course.syllabus.length} Modules`}</strong></span>
               </div>
-              <div className="flex items-center gap-2">
-                <BookOpen className="h-4 w-4 text-[#2563EB]" />
+              <div className="flex items-center gap-1.5">
+                <Layers className="h-4 w-4 text-[#2563EB] shrink-0" />
+                <span className="text-[#626B78]">Modules: <strong className="text-[#151922]">{course.syllabus.length} Modules</strong></span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                <span className="text-[#626B78]">Projects: <strong className="text-[#151922]">{course.projectCount || `${course.realWorldProjects.length} Projects`}</strong></span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <BookOpen className="h-4 w-4 text-[#2563EB] shrink-0" />
                 <span className="text-[#626B78]">Level: <strong className="text-[#151922]">{course.level}</strong></span>
-              </div>
-              <div className="col-span-2 sm:col-span-1 flex items-center gap-2">
-                <Layers className="h-4 w-4 text-[#2563EB]" />
-                <span className="text-[#626B78]">Prereq: <strong className="text-[#151922]">{course.prerequisites[0] || 'Basic computer literacy'}</strong></span>
               </div>
             </div>
 
             {/* Scrollable Body with Syllabus Accordion */}
             <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-6">
+              {/* THADAM 75 Curriculum Journey & Learning Model Strip */}
+              {course.trainingDays && (
+                <div className="rounded-2xl border border-blue-200 bg-gradient-to-r from-blue-50/70 via-indigo-50/50 to-emerald-50/50 p-4 text-xs space-y-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-blue-200/60 pb-2">
+                    <span className="font-bold text-[#151922] flex items-center gap-1.5">
+                      <Sparkles className="h-4 w-4 text-[#2563EB]" />
+                      <span>{course.programType || 'Professional Certificate Program'} • {course.preparedBy ? `Prepared by ${course.preparedBy}` : '6F School of IT'}</span>
+                    </span>
+                    <span className="text-[11px] font-mono text-emerald-700 font-bold bg-emerald-100/70 px-2 py-0.5 rounded-md">
+                      {course.trainingDays} Days • {course.corePhases || 3} Core Phases
+                    </span>
+                  </div>
+
+                  {course.curriculumJourney && (
+                    <div>
+                      <span className="text-[10px] font-mono uppercase tracking-wider text-slate-500 font-bold block mb-1.5">
+                        Curriculum Journey:
+                      </span>
+                      <div className="flex flex-wrap items-center gap-1 text-[11px] font-bold text-blue-900">
+                        {course.curriculumJourney.map((step, sIdx, arr) => (
+                          <React.Fragment key={step}>
+                            <span className="bg-white/80 border border-blue-200/70 px-2 py-0.5 rounded-md shadow-2xs">
+                              {step}
+                            </span>
+                            {sIdx < arr.length - 1 && (
+                              <span className="text-slate-400 font-normal">→</span>
+                            )}
+                          </React.Fragment>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {course.learningModel && (
+                    <div className="text-[11px] text-slate-600">
+                      <strong className="text-slate-800">Learning Model:</strong> {course.learningModel}
+                    </div>
+                  )}
+                </div>
+              )}
               {/* Learning Outcomes */}
               <div className="rounded-2xl border border-[#E5E9F0] bg-[#F7F9FC] p-4 text-xs">
                 <span className="font-bold text-[#151922] block mb-2">Key Competency Goals:</span>
