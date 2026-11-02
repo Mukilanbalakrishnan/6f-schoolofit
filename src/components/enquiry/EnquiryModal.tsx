@@ -66,7 +66,7 @@ export const EnquiryModal: React.FC = () => {
                   <span>Get Program Details & Syllabus</span>
                 </div>
                 <h3 id="enquiry-modal-title" className="text-xl font-bold text-[#151922]">
-                  Enquire at 6F IT School
+                  Enquire at 6F School of IT
                 </h3>
                 <p className="mt-0.5 text-xs text-[#626B78]">
                   Speak with our mentors about lab access, batch schedules, and curriculum details.

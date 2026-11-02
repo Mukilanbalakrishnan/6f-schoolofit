@@ -4,7 +4,7 @@ export const GLOBAL_FAQS: FAQItem[] = [
   {
     id: 'faq-1',
     category: 'Learning Methodology',
-    question: 'How are courses at 6F IT School structured?',
+    question: 'How are courses at 6F School of IT structured?',
     answer:
       'Our programs are structured around practical lab work and project delivery. Rather than passive theory lectures, each session pairs technical concepts with guided hands-on exercises in real environments (AWS console, terminal, Kubernetes, IDE).',
   },

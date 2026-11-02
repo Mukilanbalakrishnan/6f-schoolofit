@@ -167,7 +167,7 @@ export const HomePage: React.FC = () => {
         <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
           <img
             src={heroBg}
-            alt="6F IT School Cloud & AI Infrastructure Background"
+            alt="6F School of IT Cloud & AI Infrastructure Background"
             className="w-full h-full object-cover object-center opacity-85"
           />
           {/* Subtle gradient wash: allows glowing network paths to shine while blending smoothly into sections */}
@@ -206,25 +206,7 @@ export const HomePage: React.FC = () => {
         />
 
         <div className="relative z-10 mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          {/* Top Eyebrow Announcement Pill */}
-          <motion.div
-            initial={{ opacity: 0, y: -16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 rounded-full border border-[#2563EB]/20 bg-gradient-to-r from-[#2563EB]/8 via-blue-500/5 to-[#2563EB]/8 px-4 py-1.5 text-xs font-bold text-[#2563EB] mb-6 shadow-xs backdrop-blur-xs"
-          >
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2563EB] opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#2563EB]" />
-            </span>
-            <span>6F IT School • Technology Academy</span>
-            <span className="text-[#E5E9F0]">|</span>
-            <span className="text-[#626B78] font-semibold flex items-center gap-1">
-              2026 Practical Cohorts
-              <Sparkles className="h-3 w-3 text-amber-500" />
-            </span>
-          </motion.div>
-
+          
           {/* Master Headline with Gradient Accent */}
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
@@ -243,7 +225,7 @@ export const HomePage: React.FC = () => {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-5 text-base sm:text-lg lg:text-xl text-[#626B78] leading-relaxed max-w-2xl mx-auto font-normal"
+            className="mt-5 text-base sm:text-lg lg:text-xl text-slate-700 leading-relaxed max-w-2xl mx-auto font-medium font-hero-sub"
           >
             Explore AI-Powered AWS DevOps, Azure DevOps, and AIOps through structured guided labs, verified architectural code reviews, and production capstone deployments.
           </motion.p>
@@ -448,7 +430,7 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* =========================================================================
-          3. WHY CHOOSE 6F IT SCHOOL (#why-us)
+          3. WHY CHOOSE 6F SCHOOL OF IT (#why-us)
          ========================================================================= */}
       <section id="why-us" className="relative border-b border-[#E5E9F0] bg-white py-16 lg:py-24 overflow-hidden">
         <SectionMarginSketches variant="why-us" />
@@ -465,7 +447,7 @@ export const HomePage: React.FC = () => {
               <span>Educational Excellence</span>
             </div>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-[#151922]">
-              Why Choose 6F IT School?
+              Why Choose 6F School of IT?
             </h2>
             <p className="mt-2 text-sm sm:text-base text-[#626B78] leading-relaxed">
               We teach authentic engineering workflows, cloud infrastructure, and software design.
@@ -1311,7 +1293,7 @@ export const HomePage: React.FC = () => {
                     {activeScreenshot.packageOrHike}
                   </span>
                   <span className="text-[10px] text-slate-500 font-medium">
-                    Verified WhatsApp Offer • 6F IT School
+                    Verified WhatsApp Offer • 6F School of IT
                   </span>
                 </div>
                 <button

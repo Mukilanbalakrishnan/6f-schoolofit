@@ -10,9 +10,10 @@ interface ProjectCardProps {
 
 export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onInspect }) => {
   const getTrackIcon = () => {
-    if (project.category.includes('AWS')) return <Cloud className="h-5 w-5 text-[#2563EB]" />;
-    if (project.category.includes('Azure')) return <GitMerge className="h-5 w-5 text-sky-600" />;
-    return <Bot className="h-5 w-5 text-indigo-600" />;
+    const iconClass = "h-5 w-5 transition-colors duration-200 group-hover:text-white";
+    if (project.category.includes('AWS')) return <Cloud className={`${iconClass} text-[#2563EB]`} />;
+    if (project.category.includes('Azure')) return <GitMerge className={`${iconClass} text-sky-600`} />;
+    return <Bot className={`${iconClass} text-indigo-600`} />;
   };
 
   const getTrackAccent = () => {

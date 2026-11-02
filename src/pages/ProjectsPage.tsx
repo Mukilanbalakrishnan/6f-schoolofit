@@ -47,7 +47,7 @@ export const ProjectsPage: React.FC = () => {
             Student Capstone Projects
           </h1>
           <p className="mt-3 text-base text-[#626B78] leading-relaxed">
-            Every 6F IT School program concludes with an audited production capstone proving real-world competence.
+            Every 6F School of IT program concludes with an audited production capstone proving real-world competence.
           </p>
         </motion.div>
 

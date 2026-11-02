@@ -44,7 +44,7 @@ export const Navbar: React.FC = () => {
 
     const element = document.getElementById(id);
     if (element) {
-      const navOffset = 70; // Header height + small spacing
+      const navOffset = 96; // Header height + small spacing
       const elementPosition = element.getBoundingClientRect().top + window.scrollY;
       const offsetPosition = elementPosition - navOffset;
 
@@ -108,7 +108,7 @@ export const Navbar: React.FC = () => {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-[#E5E9F0] bg-white/95 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-20 sm:h-24 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Brand Logo - Scrolls to Top */}
         <a
           href="#home"
@@ -119,7 +119,7 @@ export const Navbar: React.FC = () => {
           <img
             src="/1-no-bg.svg"
             alt="6F School of IT"
-            className="h-10 sm:h-11 w-auto object-contain"
+            className="h-14 sm:h-16 lg:h-18 w-auto object-contain"
           />
         </a>
 

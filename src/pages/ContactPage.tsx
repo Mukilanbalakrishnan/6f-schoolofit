@@ -20,7 +20,7 @@ export const ContactPage: React.FC = () => {
             <span>Get In Touch</span>
           </div>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#151922]">
-            Contact 6F IT School
+            Contact 6F School of IT
           </h1>
           <p className="mt-3 text-base text-[#626B78] leading-relaxed">
             Have questions regarding curriculum tracks, lab environments, or batch schedules? Send us an enquiry.

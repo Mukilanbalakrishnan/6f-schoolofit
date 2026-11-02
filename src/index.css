@@ -33,3 +33,8 @@
     outline-offset: 2px;
   }
 }
+
+.font-hero-sub {
+  font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  letter-spacing: -0.01em;
+}

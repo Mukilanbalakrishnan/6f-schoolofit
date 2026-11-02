@@ -30,10 +30,10 @@ export const AboutPage: React.FC = () => {
             <span>About Us</span>
           </div>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#151922]">
-            About 6F IT School
+            About 6F School of IT
           </h1>
           <p className="mt-3 text-base sm:text-lg text-[#626B78] leading-relaxed">
-            6F IT School is a technology training institution focused on AI-Powered AWS DevOps, Azure DevOps, and AIOps. We bridge the gap between classroom theory and industry production standards.
+            6F School of IT is a technology training institution focused on AI-Powered AWS DevOps, Azure DevOps, and AIOps. We bridge the gap between classroom theory and industry production standards.
           </p>
         </motion.div>
 
@@ -164,7 +164,7 @@ export const AboutPage: React.FC = () => {
         {/* Call to action */}
         <div className="text-center max-w-xl mx-auto py-8">
           <h3 className="text-2xl font-bold text-[#151922]">
-            Ready to train with 6F IT School?
+            Ready to train with 6F School of IT?
           </h3>
           <div className="mt-6 flex justify-center gap-3">
             <motion.button

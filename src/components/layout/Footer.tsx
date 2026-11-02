@@ -21,7 +21,7 @@ export const Footer: React.FC = () => {
     }
     const element = document.getElementById(id);
     if (element) {
-      const navOffset = 70;
+      const navOffset = 96;
       const elementPosition = element.getBoundingClientRect().top + window.scrollY;
       window.scrollTo({ top: elementPosition - navOffset, behavior: 'smooth' });
       window.history.pushState(null, '', `#${id}`);
@@ -33,7 +33,7 @@ export const Footer: React.FC = () => {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 lg:py-14">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           {/* Brand Info */}
-          <div className="lg:col-span-2 space-y-3">
+          <div className="lg:col-span-2 space-y-4">
             <a
               href="#home"
               onClick={(e) => handleScrollTo('home', e)}
@@ -43,7 +43,7 @@ export const Footer: React.FC = () => {
               <img
                 src="/1-no-bg.svg"
                 alt="6F School of IT"
-                className="h-11 sm:h-12 w-auto object-contain"
+                className="h-16 sm:h-20 lg:h-24 w-auto max-w-[240px] object-contain"
               />
             </a>
             <p className="text-xs text-[#626B78] leading-relaxed max-w-sm">
@@ -174,7 +174,7 @@ export const Footer: React.FC = () => {
 
         {/* Bottom Bar */}
         <div className="mt-8 border-t border-[#E5E9F0] pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-[#626B78]">
-          <p>© {new Date().getFullYear()} 6F IT School. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} 6F School of IT. All rights reserved.</p>
           <p className="text-[#626B78]/80 font-mono">
             Practical Engineering Academy | Single Page Architecture
           </p>

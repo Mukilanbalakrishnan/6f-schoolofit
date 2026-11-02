@@ -38,7 +38,7 @@ export const TermsPage: React.FC = () => {
             <section>
               <h2 className="text-base font-bold text-[#151922] mb-1.5">1. Agreement to Terms</h2>
               <p>
-                By accessing and using the 6F IT School website, you acknowledge that you have read, understood,
+                By accessing and using the 6F School of IT website, you acknowledge that you have read, understood,
                 and agreed to be bound by these draft Terms and Conditions.
               </p>
             </section>
@@ -46,7 +46,7 @@ export const TermsPage: React.FC = () => {
             <section>
               <h2 className="text-base font-bold text-[#151922] mb-1.5">2. Educational Services & Curriculum</h2>
               <p>
-                6F IT School provides practical technology training across cloud computing, DevOps engineering,
+                6F School of IT provides practical technology training across cloud computing, DevOps engineering,
                 agentic artificial intelligence, and software development.
               </p>
             </section>
@@ -54,7 +54,7 @@ export const TermsPage: React.FC = () => {
             <section>
               <h2 className="text-base font-bold text-[#151922] mb-1.5">3. Integrity of Claims</h2>
               <p>
-                6F IT School does not provide guaranteed job placements, invented minimum salary assurances, or
+                6F School of IT does not provide guaranteed job placements, invented minimum salary assurances, or
                 unverified employment affiliations. All student outcomes depend directly upon individual learner effort,
                 rigor in lab exercises, and capstone project performance.
               </p>

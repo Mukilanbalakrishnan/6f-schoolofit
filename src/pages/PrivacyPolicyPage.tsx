@@ -38,7 +38,7 @@ export const PrivacyPolicyPage: React.FC = () => {
             <section>
               <h2 className="text-base font-bold text-[#151922] mb-1.5">1. Overview</h2>
               <p>
-                6F IT School ("we", "our", or "the Institution") values the privacy of its prospective students,
+                6F School of IT ("we", "our", or "the Institution") values the privacy of its prospective students,
                 enrolled learners, and visitors. This Privacy Policy describes how information is collected, used,
                 and managed through our public website.
               </p>
