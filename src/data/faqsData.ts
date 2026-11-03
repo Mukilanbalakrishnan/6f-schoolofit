@@ -2,6 +2,27 @@ import type { FAQItem } from '../types';
 
 export const GLOBAL_FAQS: FAQItem[] = [
   {
+    id: 'faq-best-it-school',
+    category: 'General',
+    question: 'Why is 6F School of IT ranked as the best IT training institute in Chennai?',
+    answer:
+      '6F School of IT is widely regarded as Chennai’s premier IT academy because of our strict 100% lab-first engineering model. Unlike conventional training institutes that teach from passive slide-decks, we place students directly into real AWS and Azure cloud consoles, production Kubernetes clusters, Linux terminals, and modern AI toolchains with daily 1:1 mentor code reviews.',
+  },
+  {
+    id: 'faq-best-devops-courses',
+    category: 'Courses',
+    question: 'What are the best DevOps courses offered at 6F School of IT?',
+    answer:
+      'Our flagship programs include THADAM 75: AI-Powered AWS DevOps Engineer, THADAM 75: AI-Powered Azure DevOps Engineer, and AI-Powered AIOps. Each curriculum spans 75 days of intensive hands-on execution covering Linux, Docker, Kubernetes, Terraform IaC, GitHub Actions, DevSecOps, and autonomous AI agents (Amazon Q & LangGraph).',
+  },
+  {
+    id: 'faq-placement-support',
+    category: 'Learning Methodology',
+    question: 'Does 6F School of IT provide placement assistance and interview preparation in Chennai?',
+    answer:
+      'Yes. Every learner receives comprehensive career support including 1:1 resume architectural audits, public GitHub portfolio verification, scenario-based system troubleshooting challenges, and mock technical interviews with senior engineers, directly connecting graduates to top tech companies in Chennai, Bengaluru, and remote teams.',
+  },
+  {
     id: 'faq-1',
     category: 'Learning Methodology',
     question: 'How are courses at 6F School of IT structured?',
@@ -27,7 +48,7 @@ export const GLOBAL_FAQS: FAQItem[] = [
     category: 'Enquiries',
     question: 'How do I get detailed syllabus documents and schedule information?',
     answer:
-      'Submit an enquiry using our 5-field form specifying your course of interest. Our admissions team will share the verified schedule, lab access details, and answer any specific questions you have.',
+      'Submit an enquiry using our 5-field form specifying your course of interest. Our admissions team in Chennai will share the verified schedule, lab access details, and answer any specific questions you have.',
   },
   {
     id: 'faq-5',

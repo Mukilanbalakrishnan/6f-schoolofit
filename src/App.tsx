@@ -33,12 +33,12 @@ export function App() {
     <BrowserRouter>
       <EnquiryProvider>
         <ScrollToTop />
-        <div className="flex min-h-screen flex-col bg-white text-[#151922] antialiased selection:bg-[#2563EB]/15 selection:text-[#2563EB]">
+        <div className="flex min-h-screen w-full flex-col bg-white text-[#151922] antialiased selection:bg-[#2563EB]/15 selection:text-[#2563EB] overflow-x-hidden">
           {/* Sticky Header */}
           <Navbar />
 
           {/* Main Content Viewport */}
-          <main className="flex-1">
+          <main className="flex-1 w-full overflow-x-hidden">
             <Suspense fallback={<PageFallback />}>
               <Routes>
                 <Route path="/" element={<HomePage />} />

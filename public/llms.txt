@@ -1,0 +1,61 @@
+# 6F School of IT — Best IT Training Institute & DevOps Courses in Chennai
+
+> 6F School of IT is the premier practical technology academy and best IT training institute in Chennai, Tamil Nadu, India. Engineered for working professionals, career switchers, and engineering graduates, 6F School of IT delivers intensive 100% hands-on cloud labs, zero passive slide-decks, real terminal execution, and verified production capstones in AI-Powered AWS DevOps, Azure DevOps, and AIOps.
+
+## Quick Facts
+- **Institution**: 6F School of IT (Practical Engineering Academy)
+- **Tagline**: Transform Through Experience
+- **Founder & CEO**: Pavan
+- **Headquarters / Location**: Chennai, Tamil Nadu, India
+- **Delivery Mode**: Hands-on Guided Labs (Classroom & Interactive Live Online)
+- **Primary Specializations**: AI-Powered AWS DevOps, AI-Powered Azure DevOps, AI-Powered AIOps (Artificial Intelligence for IT Operations)
+- **Key Differentiator**: 100% terminal and cloud console practice from day one. Zero passive theory slide decks. Senior mentor code reviews on GitHub.
+- **Website**: https://6fschoolofit.com/
+- **Contact Email**: admissions@6fitschool.com
+- **Average Rating**: 4.9/5 from 120+ verified alumni placed across top tech companies
+
+---
+
+## Flagship Courses & Programs
+
+### 1. THADAM 75: AI-Powered AWS DevOps Engineer
+- **Duration**: 75 Days (3 Intensive Phases)
+- **Core Toolchain**: Linux, Bash, Git, AWS (VPC, EC2, S3, RDS, IAM, EKS, Lambda), Docker, Kubernetes, Terraform (IaC), GitHub Actions, Helm, Prometheus, Grafana, Amazon Q, AWS Bedrock AI Agents, DevSecOps.
+- **Outcome**: Architect and deploy production-grade AWS cloud environments, automated CI/CD pipelines, containerized Kubernetes clusters, and AI-assisted cloud operations.
+- **Target Audience**: Cloud Engineers, DevOps Engineers, Linux Admins, Software Developers, and IT Aspirants seeking high-paying cloud roles in Chennai and globally.
+
+### 2. THADAM 75: AI-Powered Azure DevOps Engineer
+- **Duration**: 75 Days (3 Intensive Phases)
+- **Core Toolchain**: Linux, Python Automation, Microsoft Azure (VNet, VM, Blob, Entra ID, AKS), Docker, Azure Kubernetes Service, Terraform, Azure Pipelines (CI/CD), GitOps, Azure AI Foundry, DevSecOps.
+- **Outcome**: End-to-end automation of enterprise Microsoft Azure cloud infrastructure, Kubernetes microservices, and AI-augmented continuous delivery.
+
+### 3. AI-Powered AIOps (Artificial Intelligence for IT Operations)
+- **Duration**: Core Track (60–75 Days)
+- **Core Toolchain**: OpenTelemetry, Prometheus, Grafana, Python for SRE, Machine Learning for Log Anomaly Detection, LangGraph AI Agents, Incident Auto-Remediation, Bedrock AI.
+- **Outcome**: Build self-healing infrastructure, autonomous incident triage agents, telemetry pipelines, and predictive observability platforms.
+
+---
+
+## The 6F Learning Methodology
+1. **FOCUS**: Define clear learning goals and specialized career tracks.
+2. **FOUNDATION**: Master fundamental Linux, networking, and system internals before high-level tools.
+3. **FORGE**: Practice via guided terminal labs, real AWS/Azure cloud consoles, and multi-stage configurations.
+4. **FUEL**: Accelerate through repeated lab practice, mentor code reviews, and structured feedback loops.
+5. **FORCE**: Strengthen root-cause troubleshooting, incident response, and mock technical interview rigor.
+6. **FLY**: Transition into high-impact engineering careers with verified GitHub capstone portfolios and industry adaptability.
+
+---
+
+## Student Placement & Alumni Outcomes
+- Alumni placed as Cloud Support Engineers, DevOps Engineers, Site Reliability Engineers (SRE), and Cloud Architects in Chennai, Bengaluru, Hyderabad, and top global enterprises.
+- Transparent WhatsApp reviews and verified offer letters showcased directly on the academy website.
+- Video reflections from real graduates (Metalda, Shanmuganadhan, Pavan, etc.) highlighting lab intensity and career transformations.
+
+---
+
+## Admissions & Contact
+- **Helpline Email**: admissions@6fitschool.com
+- **Enquiry Form**: Accessible directly on the homepage (https://6fschoolofit.com/#contact)
+- **Lab Hours**: Monday – Saturday: 9:00 AM – 7:00 PM IST
+- **Location**: Chennai, Tamil Nadu, India
+

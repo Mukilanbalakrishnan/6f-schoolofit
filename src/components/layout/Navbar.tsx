@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useEnquiry } from '../../context/EnquiryContext';
 import { Menu, X, ArrowUpRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { BrandLogo } from '../common/BrandLogo';
 
 const NAV_LINKS = [
   { name: 'Home', id: 'home' },
@@ -44,7 +45,7 @@ export const Navbar: React.FC = () => {
 
     const element = document.getElementById(id);
     if (element) {
-      const navOffset = 96; // Header height + small spacing
+      const navOffset = 70; // Header height + small spacing
       const elementPosition = element.getBoundingClientRect().top + window.scrollY;
       const offsetPosition = elementPosition - navOffset;
 
@@ -75,7 +76,7 @@ export const Navbar: React.FC = () => {
     if (location.pathname !== '/') return;
 
     const handleScroll = () => {
-      const scrollPosition = window.scrollY + 140;
+      const scrollPosition = window.scrollY + 100;
 
       for (let i = NAV_LINKS.length - 1; i >= 0; i--) {
         const item = NAV_LINKS[i];
@@ -108,7 +109,7 @@ export const Navbar: React.FC = () => {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-[#E5E9F0] bg-white/95 backdrop-blur-md">
-      <div className="mx-auto flex h-20 sm:h-24 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-14 sm:h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Brand Logo - Scrolls to Top */}
         <a
           href="#home"
@@ -116,11 +117,7 @@ export const Navbar: React.FC = () => {
           className="flex items-center focus:outline-none focus:ring-2 focus:ring-[#2563EB] rounded-md py-1 cursor-pointer"
           aria-label="6F School of IT Homepage"
         >
-          <img
-            src="/1-no-bg.svg"
-            alt="6F School of IT"
-            className="h-14 sm:h-16 lg:h-18 w-auto object-contain"
-          />
+          <BrandLogo variant="navbar" />
         </a>
 
         {/* Desktop Nav - In-page Smooth Navigation */}

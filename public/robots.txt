@@ -1,0 +1,49 @@
+# robots.txt for 6F School of IT - Best IT Training Institute & DevOps Courses in Chennai
+# Website: https://6fschoolofit.com/
+
+User-agent: *
+Allow: /
+
+# Allow All Modern AI Search Engines & LLM Crawlers
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+# Sitemap & LLM context
+Sitemap: https://6fschoolofit.com/sitemap.xml
+

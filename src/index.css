@@ -13,9 +13,13 @@
 
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
+    max-width: 100vw;
   }
 
   body {
+    overflow-x: hidden;
+    max-width: 100vw;
     background-color: var(--bg-primary);
     color: var(--text-main);
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -37,4 +41,13 @@
 .font-hero-sub {
   font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   letter-spacing: -0.01em;
+}
+
+.font-brand-title {
+  font-family: 'Oswald', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  letter-spacing: 0.04em;
+}
+
+.font-brand-script {
+  font-family: 'Caveat', 'Dancing Script', cursive;
 }

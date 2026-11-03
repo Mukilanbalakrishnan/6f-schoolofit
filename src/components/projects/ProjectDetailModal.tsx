@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import type { StudentProject } from '../../types';
 import {
   X,
@@ -26,6 +26,18 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
   onClose,
 }) => {
   const { openEnquiryModal } = useEnquiry();
+
+  // Prevent background scrolling when project detail modal is open
+  useEffect(() => {
+    if (project) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [project]);
 
   if (!project) return null;
 

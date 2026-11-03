@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useEnquiry } from '../context/EnquiryContext';
 import { COURSES } from '../data/coursesData';
 import { STUDENT_PROJECTS } from '../data/projectsData';
@@ -11,10 +11,10 @@ import { EnquiryForm } from '../components/enquiry/EnquiryForm';
 import { TechnologyCarousel } from '../components/technologies/TechnologyCarousel';
 import { FlightPathJourney } from '../components/home/FlightPathJourney';
 import { WhyChooseUsRoadmap } from '../components/home/WhyChooseUsRoadmap';
+import { FeaturedVideoShowcase } from '../components/home/FeaturedVideoShowcase';
 import { ProjectCard } from '../components/projects/ProjectCard';
 import { ProjectDetailModal } from '../components/projects/ProjectDetailModal';
 import { SectionMarginSketches } from '../components/common/SectionMarginSketches';
-import heroBg from '../assets/hero-bg.jpg';
 import {
   ArrowRight,
   ArrowUpRight,
@@ -57,15 +57,80 @@ export const HomePage: React.FC = () => {
   // Video modal state
   const [activeVideo, setActiveVideo] = useState<VideoTestimonial | null>(null);
 
+  // Mobile video carousel state (single sliding effect on mobile)
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+  const [isVideoPaused, setIsVideoPaused] = useState(false);
+  const videoTouchStartXRef = React.useRef<number | null>(null);
+
+  const handleVideoTouchStart = (e: React.TouchEvent) => {
+    setIsVideoPaused(true);
+    videoTouchStartXRef.current = e.touches[0].clientX;
+  };
+
+  const handleVideoTouchEnd = (e: React.TouchEvent) => {
+    setIsVideoPaused(false);
+    if (videoTouchStartXRef.current !== null) {
+      const touchEndX = e.changedTouches[0].clientX;
+      const diff = videoTouchStartXRef.current - touchEndX;
+      if (diff > 40) {
+        setCurrentVideoIndex((prev) => (prev < VIDEO_TESTIMONIALS.length - 1 ? prev + 1 : 0));
+      } else if (diff < -40) {
+        setCurrentVideoIndex((prev) => (prev > 0 ? prev - 1 : VIDEO_TESTIMONIALS.length - 1));
+      }
+      videoTouchStartXRef.current = null;
+    }
+  };
+
+  // Auto-slide mobile videos every 4.5s (pauses on interaction or modal open)
+  React.useEffect(() => {
+    if (isVideoPaused || activeVideo) return;
+    const interval = setInterval(() => {
+      setCurrentVideoIndex((prev) => (prev < VIDEO_TESTIMONIALS.length - 1 ? prev + 1 : 0));
+    }, 4500);
+    return () => clearInterval(interval);
+  }, [isVideoPaused, activeVideo]);
+
     // Carousel state for student WhatsApp review cards
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(true);
   const [isPaused, setIsPaused] = useState(false);
   const [visibleCards, setVisibleCards] = useState(4);
+  const touchStartXRef = React.useRef<number | null>(null);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setIsPaused(true);
+    touchStartXRef.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    setIsPaused(false);
+    if (touchStartXRef.current !== null) {
+      const touchEndX = e.changedTouches[0].clientX;
+      const diff = touchStartXRef.current - touchEndX;
+      if (diff > 40) {
+        setCurrentIndex((prev) => prev + 1);
+      } else if (diff < -40) {
+        setCurrentIndex((prev) => (prev > 0 ? prev - 1 : totalReviews - 1));
+      }
+      touchStartXRef.current = null;
+    }
+  };
 
   // Active WhatsApp Screenshot Lightbox Modal
   const [activeScreenshotIndex, setActiveScreenshotIndex] = useState<number | null>(null);
   const activeScreenshot = activeScreenshotIndex !== null ? ALL_WHATSAPP_REVIEWS[activeScreenshotIndex] : null;
+
+  // Prevent background scrolling when popups (video modal or screenshot lightbox) are open
+  useEffect(() => {
+    if (activeVideo || activeScreenshotIndex !== null) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [activeVideo, activeScreenshotIndex]);
 
   // Responsive visible cards count
   React.useEffect(() => {
@@ -154,6 +219,97 @@ export const HomePage: React.FC = () => {
       ? STUDENT_PROJECTS
       : STUDENT_PROJECTS.filter((p) => p.category === selectedProjectCategory);
 
+  const renderVideoCard = (video: VideoTestimonial, isMobileSlide = false) => (
+    <div
+      className={`group rounded-3xl border border-[#E5E9F0] bg-white p-5 sm:p-6 shadow-2xs hover:border-[#2563EB]/40 hover:shadow-xl hover:shadow-blue-500/10 transition-all flex flex-col justify-between text-left h-full ${
+        isMobileSlide ? 'w-full max-w-sm mx-auto' : ''
+      }`}
+    >
+      <div>
+        {/* Thumbnail box with real photo & play overlay */}
+        <div
+          onClick={() => setActiveVideo(video)}
+          className="relative aspect-[4/5] rounded-2xl overflow-hidden shadow-xs mb-4 group/thumb cursor-pointer bg-slate-900"
+        >
+          {video.thumbnailUrl ? (
+            <img
+              src={video.thumbnailUrl}
+              alt={`${video.studentNameOrCode} video review`}
+              className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-500 group-hover/thumb:scale-105"
+              loading="lazy"
+            />
+          ) : (
+            <div className="absolute inset-0 bg-gradient-to-tr from-[#151922] to-[#334155]" />
+          )}
+
+          {/* Scrim gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/40 pointer-events-none" />
+
+          {/* Top Badges */}
+          <div className="relative z-10 p-3 flex items-center justify-between text-white text-[11px] font-semibold">
+            <span className="rounded-md bg-black/60 px-2 py-0.5 backdrop-blur-md font-mono text-[10px] border border-white/10">
+              {video.duration}
+            </span>
+            {video.roleBadge && (
+              <span className="rounded-md bg-[#2563EB] px-2.5 py-0.5 text-[10px] font-bold shadow-xs">
+                {video.roleBadge}
+              </span>
+            )}
+          </div>
+
+          {/* Center Play Button */}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setActiveVideo(video);
+            }}
+            className="absolute inset-0 m-auto flex h-14 w-14 items-center justify-center rounded-full bg-white/95 text-[#2563EB] shadow-2xl transition-all duration-300 group-hover/thumb:scale-115 group-hover/thumb:bg-white group-hover/thumb:ring-4 group-hover/thumb:ring-blue-500/40 cursor-pointer z-10"
+            aria-label={`Play testimonial from ${video.studentNameOrCode}`}
+          >
+            <Play className="h-6 w-6 fill-current ml-0.5 text-[#2563EB]" />
+          </button>
+
+          {/* Bottom Course Label inside card */}
+          <div className="relative z-10 p-3 mt-auto">
+            <div className="text-white text-xs font-bold truncate drop-shadow-sm">
+              {video.courseTitle}
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-1">
+          <div className="flex items-center justify-between gap-2">
+            <h4 className="text-base font-bold text-[#151922] tracking-tight">
+              {video.studentNameOrCode}
+            </h4>
+            {video.roleBadge && (
+              <span className="text-[10px] font-bold text-blue-700 bg-blue-50 border border-blue-200/60 rounded-full px-2 py-0.5 shrink-0">
+                {video.roleBadge}
+              </span>
+            )}
+          </div>
+          <span className="text-[11px] text-[#626B78] block">{video.batchOrYear}</span>
+
+          <p className="text-xs text-[#626B78] italic line-clamp-3 leading-relaxed pt-1">
+            "{video.transcriptSnippet}"
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-4 pt-3 border-t border-[#E5E9F0]">
+        <button
+          type="button"
+          onClick={() => setActiveVideo(video)}
+          className="w-full flex items-center justify-center gap-1.5 rounded-xl border border-[#E5E9F0] bg-[#F7F9FC] py-2.5 text-xs font-bold text-[#151922] hover:bg-[#2563EB] hover:text-white hover:border-[#2563EB] transition-all cursor-pointer shadow-2xs"
+        >
+          <Play className="h-3.5 w-3.5 fill-current" />
+          <span>Watch Alumni Video</span>
+        </button>
+      </div>
+    </div>
+  );
+
   return (
     <div className="w-full bg-white text-[#151922] overflow-x-hidden">
       {/* =========================================================================
@@ -163,47 +319,21 @@ export const HomePage: React.FC = () => {
         id="home"
         className="relative border-b border-[#E5E9F0] pt-14 pb-18 lg:pt-20 lg:pb-24 overflow-hidden text-center"
       >
-        {/* Generated Ultra-Modern Cloud & AI Tech Background Image */}
+        {/* Background Video (Futuristic AI Cloud Infrastructure - Clean & Full Opacity) */}
         <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-          <img
-            src={heroBg}
-            alt="6F School of IT Cloud & AI Infrastructure Background"
-            className="w-full h-full object-cover object-center opacity-85"
-          />
-          {/* Subtle gradient wash: allows glowing network paths to shine while blending smoothly into sections */}
-          <div className="absolute inset-0 bg-gradient-to-b from-white/60 via-white/15 to-white/90" />
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+            poster="/hero-video-poster.jpg"
+            className="w-full h-full object-cover object-center"
+          >
+            <source src="/hero-video.mp4" type="video/mp4" />
+          </video>
         </div>
 
-        {/* Subtle technical background grid mesh */}
-        <div className="absolute inset-0 bg-[radial-gradient(#2563EB_1px,transparent_1px)] [background-size:24px_24px] opacity-10 pointer-events-none z-0" />
-
-        {/* Ambient floating animated gradient glow blobs */}
-        <motion.div
-          animate={{
-            x: [-35, 35, -35],
-            y: [-20, 20, -20],
-            scale: [1, 1.2, 1],
-          }}
-          transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute -top-24 left-1/4 w-[480px] h-[320px] bg-gradient-to-br from-blue-300/30 via-sky-200/20 to-transparent rounded-full blur-3xl pointer-events-none z-0"
-        />
-        <motion.div
-          animate={{
-            x: [30, -30, 30],
-            y: [20, -20, 20],
-            scale: [1.15, 0.95, 1.15],
-          }}
-          transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute top-1/3 -right-20 w-[420px] h-[380px] bg-gradient-to-bl from-indigo-200/25 via-blue-200/20 to-transparent rounded-full blur-3xl pointer-events-none z-0"
-        />
-        <motion.div
-          animate={{
-            scale: [0.95, 1.1, 0.95],
-            opacity: [0.35, 0.6, 0.35],
-          }}
-          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute bottom-4 left-1/2 -translate-x-1/2 w-[650px] h-64 bg-gradient-to-r from-blue-100/40 via-teal-100/30 to-indigo-100/40 rounded-full blur-3xl pointer-events-none z-0"
-        />
 
         <div className="relative z-10 mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           
@@ -212,10 +342,10 @@ export const HomePage: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-[#151922] leading-[1.1]"
+            className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.1] drop-shadow-[0_2px_16px_rgba(0,0,0,0.7)]"
           >
             Learn Future-Ready Technologies.{' '}
-            <span className="block mt-1 sm:mt-2 bg-gradient-to-r from-[#2563EB] via-[#3B82F6] to-[#0284C7] bg-clip-text text-transparent">
+            <span className="block mt-1 sm:mt-2 bg-gradient-to-r from-[#60A5FA] via-[#38BDF8] to-[#93C5FD] bg-clip-text text-transparent drop-shadow-[0_2px_12px_rgba(37,99,235,0.5)]">
               Build Real-World Skills.
             </span>
           </motion.h1>
@@ -225,7 +355,7 @@ export const HomePage: React.FC = () => {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-5 text-base sm:text-lg lg:text-xl text-slate-700 leading-relaxed max-w-2xl mx-auto font-medium font-hero-sub"
+            className="mt-5 text-base sm:text-lg lg:text-xl text-slate-100 leading-relaxed max-w-2xl mx-auto font-medium font-hero-sub drop-shadow-[0_1px_6px_rgba(0,0,0,0.8)]"
           >
             Explore AI-Powered AWS DevOps, Azure DevOps, and AIOps through structured guided labs, verified architectural code reviews, and production capstone deployments.
           </motion.p>
@@ -261,14 +391,19 @@ export const HomePage: React.FC = () => {
           </motion.div>
 
           {/* Trust strip */}
-          <motion.p
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="mt-4 text-xs text-[#626B78] font-medium"
+            className="mt-4 flex flex-col items-center gap-1.5"
           >
-            Zero passive slide-decks • 100% hands-on cloud console & terminal execution
-          </motion.p>
+            <p className="text-xs text-slate-200 font-medium drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+              Chennai’s Premier Practical Academy • Zero passive slide-decks • 100% hands-on cloud console & terminal execution
+            </p>
+            <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-cyan-300 drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+              <span>🏆 Ranked #1 Best IT Training Institute & DevOps Academy in Chennai</span>
+            </span>
+          </motion.div>
 
           {/* 3 Structured Flagship Tracks Showcase */}
           <motion.div
@@ -428,6 +563,11 @@ export const HomePage: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* =========================================================================
+          FEATURED VIDEO SHOWCASE (Pavan • Founder & CEO Keynote)
+         ========================================================================= */}
+      <FeaturedVideoShowcase />
 
       {/* =========================================================================
           3. WHY CHOOSE 6F SCHOOL OF IT (#why-us)
@@ -642,22 +782,22 @@ export const HomePage: React.FC = () => {
             <button
               type="button"
               onClick={() => setCurrentIndex((prev) => (prev > 0 ? prev - 1 : totalReviews - 1))}
-              className="absolute -left-3 sm:-left-5 lg:-left-6 top-1/2 -translate-y-1/2 z-30 flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-white/95 backdrop-blur-md border border-slate-200/90 shadow-xl text-slate-700 hover:text-[#2563EB] hover:bg-white hover:scale-110 active:scale-95 transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
+              className="absolute left-1 sm:-left-4 lg:-left-6 top-1/2 -translate-y-1/2 z-30 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-white/95 backdrop-blur-md border border-slate-200/90 shadow-xl text-slate-700 hover:text-[#2563EB] hover:bg-white hover:scale-110 active:scale-95 transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
               aria-label="Previous slide"
               title="Previous reviews"
             >
-              <ChevronLeft className="h-6 w-6" />
+              <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
             </button>
 
             {/* Right Navigation Arrow (Positioned on the Right Side of Cards) */}
             <button
               type="button"
               onClick={() => setCurrentIndex((prev) => prev + 1)}
-              className="absolute -right-3 sm:-right-5 lg:-right-6 top-1/2 -translate-y-1/2 z-30 flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-white/95 backdrop-blur-md border border-slate-200/90 shadow-xl text-slate-700 hover:text-[#2563EB] hover:bg-white hover:scale-110 active:scale-95 transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
+              className="absolute right-1 sm:-right-4 lg:-right-6 top-1/2 -translate-y-1/2 z-30 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-white/95 backdrop-blur-md border border-slate-200/90 shadow-xl text-slate-700 hover:text-[#2563EB] hover:bg-white hover:scale-110 active:scale-95 transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
               aria-label="Next slide"
               title="Next reviews"
             >
-              <ChevronRight className="h-6 w-6" />
+              <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
             </button>
 
             {/* Carousel Viewport Container */}
@@ -665,8 +805,8 @@ export const HomePage: React.FC = () => {
               className="w-full overflow-hidden pt-4 pb-12 cursor-grab active:cursor-grabbing"
               onMouseEnter={() => setIsPaused(true)}
               onMouseLeave={() => setIsPaused(false)}
-              onTouchStart={() => setIsPaused(true)}
-              onTouchEnd={() => setIsPaused(false)}
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
             >
             <div
               className="flex"
@@ -768,7 +908,79 @@ export const HomePage: React.FC = () => {
               </p>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+            {/* Mobile View: Single Sliding Carousel with Side Arrows (< 768px) */}
+            <div className="md:hidden relative w-full group/video-carousel">
+              {/* Left Arrow Button */}
+              <button
+                type="button"
+                onClick={() =>
+                  setCurrentVideoIndex((prev) => (prev > 0 ? prev - 1 : VIDEO_TESTIMONIALS.length - 1))
+                }
+                className="absolute left-1 top-1/3 -translate-y-1/2 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-white/95 backdrop-blur-md border border-slate-200/90 shadow-xl text-slate-700 hover:text-[#2563EB] active:scale-95 transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
+                aria-label="Previous video"
+                title="Previous video"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+
+              {/* Right Arrow Button */}
+              <button
+                type="button"
+                onClick={() =>
+                  setCurrentVideoIndex((prev) => (prev < VIDEO_TESTIMONIALS.length - 1 ? prev + 1 : 0))
+                }
+                className="absolute right-1 top-1/3 -translate-y-1/2 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-white/95 backdrop-blur-md border border-slate-200/90 shadow-xl text-slate-700 hover:text-[#2563EB] active:scale-95 transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
+                aria-label="Next video"
+                title="Next video"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
+
+              {/* Sliding Track Viewport with Touch Gestures */}
+              <div
+                className="w-full overflow-hidden px-1 pt-1 pb-3 cursor-grab active:cursor-grabbing"
+                onMouseEnter={() => setIsVideoPaused(true)}
+                onMouseLeave={() => setIsVideoPaused(false)}
+                onTouchStart={handleVideoTouchStart}
+                onTouchEnd={handleVideoTouchEnd}
+              >
+                <div
+                  className="flex transition-transform duration-500 ease-in-out"
+                  style={{ transform: `translateX(-${currentVideoIndex * 100}%)` }}
+                >
+                  {VIDEO_TESTIMONIALS.map((video) => (
+                    <div key={video.id} className="w-full shrink-0 px-2">
+                      {renderVideoCard(video, true)}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Pagination Dots & Slide Counter */}
+              <div className="flex items-center justify-center gap-2 mt-4">
+                {VIDEO_TESTIMONIALS.map((_, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setCurrentVideoIndex(idx)}
+                    className={`transition-all duration-300 rounded-full cursor-pointer ${
+                      currentVideoIndex === idx
+                        ? 'w-7 h-2 bg-[#2563EB]'
+                        : 'w-2 h-2 bg-slate-300 hover:bg-slate-400'
+                    }`}
+                    aria-label={`Go to video slide ${idx + 1}`}
+                  />
+                ))}
+              </div>
+              <div className="text-center mt-2">
+                <span className="text-[11px] font-mono text-slate-500 bg-slate-100 border border-slate-200 rounded-full px-2.5 py-0.5">
+                  {currentVideoIndex + 1} of {VIDEO_TESTIMONIALS.length}
+                </span>
+              </div>
+            </div>
+
+            {/* Desktop & Tablet View: 2/3 Column Grid (>= 768px) */}
+            <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 text-left">
               {VIDEO_TESTIMONIALS.map((video, idx) => (
                 <motion.div
                   key={video.id}
@@ -777,53 +989,8 @@ export const HomePage: React.FC = () => {
                   viewport={{ once: true, margin: '-40px' }}
                   transition={{ duration: 0.45, delay: idx * 0.08 }}
                   whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                  className="rounded-3xl border border-[#E5E9F0] bg-white p-6 shadow-2xs hover:border-[#2563EB]/40 hover:shadow-lg hover:shadow-blue-500/5 transition-all flex flex-col justify-between"
                 >
-                  <div>
-                    {/* Thumbnail box with play overlay */}
-                    <div className="relative aspect-video rounded-2xl bg-gradient-to-tr from-[#151922] to-[#334155] p-4 flex flex-col justify-between overflow-hidden shadow-xs mb-4">
-                      <div className="flex items-center justify-between text-white text-[11px] font-semibold">
-                        <span className="rounded bg-black/40 px-2 py-0.5 backdrop-blur-xs font-mono">
-                          {video.duration}
-                        </span>
-                        <span className="rounded bg-[#2563EB] px-2 py-0.5 text-[10px] font-bold">
-                          Lab Spotlight
-                        </span>
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={() => setActiveVideo(video)}
-                        className="self-center flex h-12 w-12 items-center justify-center rounded-full bg-white text-[#2563EB] shadow-lg hover:scale-110 transition-transform cursor-pointer"
-                        aria-label={`Play testimonial from ${video.studentNameOrCode}`}
-                      >
-                        <Play className="h-5 w-5 fill-current ml-0.5" />
-                      </button>
-
-                      <div className="text-white text-xs font-bold truncate">
-                        {video.courseTitle}
-                      </div>
-                    </div>
-
-                    <h4 className="text-sm font-bold text-[#151922]">
-                      {video.studentNameOrCode}
-                    </h4>
-                    <span className="text-[11px] text-[#626B78] block mb-2">{video.batchOrYear}</span>
-
-                    <p className="text-xs text-[#626B78] italic line-clamp-3 leading-relaxed">
-                      "{video.transcriptSnippet}"
-                    </p>
-                  </div>
-
-                  <div className="mt-4 pt-3 border-t border-[#E5E9F0]">
-                    <button
-                      type="button"
-                      onClick={() => setActiveVideo(video)}
-                      className="w-full rounded-xl border border-[#E5E9F0] bg-[#F7F9FC] py-2 text-xs font-bold text-[#151922] hover:bg-[#2563EB] hover:text-white hover:border-[#2563EB] transition-colors cursor-pointer"
-                    >
-                      Watch Story Preview
-                    </button>
-                  </div>
+                  {renderVideoCard(video, false)}
                 </motion.div>
               ))}
             </div>
@@ -849,10 +1016,10 @@ export const HomePage: React.FC = () => {
               <span>Technology Education with a Career Focus</span>
             </div>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#151922]">
-              About 6F School of IT
+              About 6F School of IT — Chennai's Premier Practical Academy
             </h2>
             <p className="mt-4 text-base sm:text-lg text-[#626B78] leading-relaxed">
-              6F School of IT is a technology-focused training academy helping IT professionals strengthen their skills and prepare for the next stage of their careers.
+              Headquartered in Chennai, 6F School of IT is recognized as the best IT training institute for hands-on, job-ready engineering. We replace slide presentations with real AWS and Azure cloud consoles, terminal automation, Kubernetes clusters, and LangGraph AI agents.
             </p>
           </motion.div>
 
@@ -1152,7 +1319,7 @@ export const HomePage: React.FC = () => {
           <div
             role="dialog"
             aria-modal="true"
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs"
+            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-sm overflow-y-auto"
           >
             <div className="fixed inset-0" onClick={() => setActiveVideo(null)} aria-hidden="true" />
             <motion.div
@@ -1160,40 +1327,73 @@ export const HomePage: React.FC = () => {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.94 }}
               transition={{ type: 'spring', damping: 25, stiffness: 350 }}
-              className="relative z-10 w-full max-w-lg rounded-3xl border border-[#E5E9F0] bg-white p-6 shadow-2xl text-left"
+              className="relative z-10 w-full max-w-lg max-h-[92vh] flex flex-col rounded-3xl border border-slate-700/60 bg-[#0F172A] p-4 sm:p-6 shadow-2xl text-left overflow-y-auto text-white my-auto"
             >
-              <div className="flex items-start justify-between pb-3 border-b border-[#E5E9F0]">
+              {/* Header */}
+              <div className="flex items-start justify-between pb-3 border-b border-slate-800">
                 <div>
-                  <span className="text-xs font-bold text-[#2563EB]">{activeVideo.courseTitle}</span>
-                  <h3 className="text-base font-bold text-[#151922]">{activeVideo.studentNameOrCode}</h3>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-xs font-bold text-blue-400">{activeVideo.courseTitle}</span>
+                    {activeVideo.roleBadge && (
+                      <span className="text-[10px] font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded px-1.5 py-0.5">
+                        {activeVideo.roleBadge}
+                      </span>
+                    )}
+                  </div>
+                  <h3 className="text-lg font-bold text-white tracking-tight">{activeVideo.studentNameOrCode}</h3>
                 </div>
                 <button
                   type="button"
                   onClick={() => setActiveVideo(null)}
-                  className="rounded-lg p-1.5 text-[#626B78] hover:bg-[#F7F9FC] hover:text-[#151922] cursor-pointer"
+                  className="rounded-xl p-1.5 text-slate-400 hover:bg-slate-800 hover:text-white transition-colors cursor-pointer"
+                  aria-label="Close video"
                 >
-                  <X className="h-4 w-4" />
+                  <X className="h-5 w-5" />
                 </button>
               </div>
 
-              <div className="mt-4 aspect-video rounded-2xl bg-[#151922] flex flex-col items-center justify-center p-6 text-center text-white">
-                <Play className="h-8 w-8 text-[#2563EB] mb-2 fill-current" />
-                <p className="text-xs font-bold">Video Player (Preview Mode)</p>
-                <span className="mt-2 text-[10px] font-mono text-zinc-400">Duration: {activeVideo.duration}</span>
+              {/* Real Video Player */}
+              <div className="mt-4 rounded-2xl bg-black overflow-hidden flex items-center justify-center shadow-inner">
+                {activeVideo.videoUrl ? (
+                  <video
+                    key={activeVideo.id}
+                    src={activeVideo.videoUrl}
+                    poster={activeVideo.thumbnailUrl}
+                    controls
+                    autoPlay
+                    playsInline
+                    className="w-full max-h-[62vh] object-contain rounded-2xl"
+                  />
+                ) : (
+                  <div className="aspect-video w-full flex flex-col items-center justify-center p-6 text-center text-white">
+                    <Play className="h-8 w-8 text-[#2563EB] mb-2 fill-current" />
+                    <p className="text-xs font-bold">Video Player</p>
+                    <span className="mt-2 text-[10px] font-mono text-zinc-400">Duration: {activeVideo.duration}</span>
+                  </div>
+                )}
               </div>
 
-              <div className="mt-4 rounded-xl border border-[#E5E9F0] bg-[#F7F9FC] p-3 text-xs text-[#151922]">
-                <span className="font-bold block mb-1">Transcript Snippet:</span>
-                <p className="italic text-[#626B78] text-[11px] leading-relaxed">{activeVideo.transcriptSnippet}</p>
+              {/* Alumni Quote / Reflection */}
+              <div className="mt-4 rounded-xl border border-slate-800 bg-slate-900/80 p-3 text-xs text-slate-200">
+                <span className="font-bold text-slate-400 text-[10px] uppercase tracking-wider block mb-1">
+                  Alumni Reflection:
+                </span>
+                <p className="italic text-slate-300 text-xs leading-relaxed">
+                  "{activeVideo.transcriptSnippet}"
+                </p>
               </div>
 
-              <div className="mt-4 flex justify-end">
+              {/* Footer */}
+              <div className="mt-4 flex items-center justify-between pt-1">
+                <span className="text-[11px] font-mono text-slate-400">
+                  Duration: {activeVideo.duration}
+                </span>
                 <button
                   type="button"
                   onClick={() => setActiveVideo(null)}
-                  className="rounded-xl border border-[#E5E9F0] bg-white px-4 py-2 text-xs font-bold text-[#151922] hover:bg-[#F7F9FC] cursor-pointer"
+                  className="rounded-xl bg-slate-800 px-4 py-2 text-xs font-bold text-white hover:bg-slate-700 transition-colors cursor-pointer"
                 >
-                  Close Preview
+                  Close
                 </button>
               </div>
             </motion.div>
@@ -1207,7 +1407,7 @@ export const HomePage: React.FC = () => {
           <div
             role="dialog"
             aria-modal="true"
-            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-sm overflow-y-auto"
           >
             <div className="fixed inset-0" onClick={() => setActiveScreenshotIndex(null)} aria-hidden="true" />
             <motion.div

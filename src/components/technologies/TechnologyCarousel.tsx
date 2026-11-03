@@ -233,6 +233,21 @@ export const TECHNOLOGY_ITEMS: TechItem[] = [
 export const TechnologyCarousel: React.FC = () => {
   const [activeCourseFilter, setActiveCourseFilter] = useState<string>('All');
   const [currentPage, setCurrentPage] = useState(0);
+  const [itemsPerScroll, setItemsPerScroll] = useState(4);
+
+  // Responsive items per scroll based on screen width
+  useEffect(() => {
+    const updateItems = () => {
+      if (typeof window !== 'undefined') {
+        if (window.innerWidth < 640) setItemsPerScroll(2);
+        else if (window.innerWidth < 1024) setItemsPerScroll(3);
+        else setItemsPerScroll(4);
+      }
+    };
+    updateItems();
+    window.addEventListener('resize', updateItems);
+    return () => window.removeEventListener('resize', updateItems);
+  }, []);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = useState(false);
 
@@ -244,7 +259,7 @@ export const TechnologyCarousel: React.FC = () => {
           (item) => item.course === activeCourseFilter || item.courseBadge === 'All Tracks'
         );
 
-  const totalPages = Math.max(1, Math.ceil(filteredItems.length / 4));
+  const totalPages = Math.max(1, Math.ceil(filteredItems.length / itemsPerScroll));
 
   // Scroll smoothly by page offset
   const scrollToPage = useCallback((pageIndex: number) => {
@@ -254,14 +269,14 @@ export const TechnologyCarousel: React.FC = () => {
     const targetPage = Math.max(0, Math.min(pageIndex, totalPages - 1));
     const cardWidth = container.querySelector<HTMLElement>('.tech-card')?.offsetWidth || 160;
     const gap = 20;
-    const scrollAmount = targetPage * ((cardWidth + gap) * 4);
+    const scrollAmount = targetPage * ((cardWidth + gap) * itemsPerScroll);
 
     container.scrollTo({
       left: scrollAmount,
       behavior: 'smooth',
     });
     setCurrentPage(targetPage);
-  }, [totalPages]);
+  }, [totalPages, itemsPerScroll]);
 
   const handlePrev = useCallback(() => {
     const prev = currentPage > 0 ? currentPage - 1 : totalPages - 1;
@@ -279,7 +294,7 @@ export const TechnologyCarousel: React.FC = () => {
     if (!container) return;
     const cardWidth = container.querySelector<HTMLElement>('.tech-card')?.offsetWidth || 160;
     const gap = 20;
-    const step = (cardWidth + gap) * 4;
+    const step = (cardWidth + gap) * itemsPerScroll;
     const calculatedPage = Math.round(container.scrollLeft / step);
     if (calculatedPage !== currentPage && calculatedPage < totalPages) {
       setCurrentPage(calculatedPage);
@@ -356,7 +371,7 @@ export const TechnologyCarousel: React.FC = () => {
           type="button"
           onClick={handlePrev}
           aria-label="Previous Technologies"
-          className="absolute -left-2 sm:left-2 top-16 sm:top-18 z-30 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-white shadow-md border border-[#E5E9F0] text-emerald-800 hover:bg-slate-50 hover:scale-105 active:scale-95 transition-all cursor-pointer"
+          className="absolute left-1 sm:left-2 top-16 sm:top-18 z-30 flex h-9 w-9 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-white shadow-md border border-[#E5E9F0] text-emerald-800 hover:bg-slate-50 hover:scale-105 active:scale-95 transition-all cursor-pointer"
         >
           <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
         </button>
@@ -366,7 +381,7 @@ export const TechnologyCarousel: React.FC = () => {
           type="button"
           onClick={handleNext}
           aria-label="Next Technologies"
-          className="absolute -right-2 sm:right-2 top-16 sm:top-18 z-30 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-white shadow-md border border-[#E5E9F0] text-emerald-800 hover:bg-slate-50 hover:scale-105 active:scale-95 transition-all cursor-pointer"
+          className="absolute right-1 sm:right-2 top-16 sm:top-18 z-30 flex h-9 w-9 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-white shadow-md border border-[#E5E9F0] text-emerald-800 hover:bg-slate-50 hover:scale-105 active:scale-95 transition-all cursor-pointer"
         >
           <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
         </button>

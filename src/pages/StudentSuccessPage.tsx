@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { SUCCESS_STORIES, VIDEO_TESTIMONIALS } from '../data/storiesData';
 import type { VideoTestimonial } from '../types';
@@ -9,6 +9,18 @@ import { motion, AnimatePresence } from 'motion/react';
 export const StudentSuccessPage: React.FC = () => {
   const [activeVideo, setActiveVideo] = useState<VideoTestimonial | null>(null);
   const { openEnquiryModal } = useEnquiry();
+
+  // Prevent background scrolling when video modal is open
+  useEffect(() => {
+    if (activeVideo) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [activeVideo]);
 
   return (
     <div className="w-full bg-white text-[#151922] py-12 lg:py-16 text-left">
@@ -102,7 +114,7 @@ export const StudentSuccessPage: React.FC = () => {
             Video Testimonials
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {VIDEO_TESTIMONIALS.map((video, idx) => (
               <motion.div
                 key={video.id}
@@ -111,42 +123,84 @@ export const StudentSuccessPage: React.FC = () => {
                 viewport={{ once: true, margin: '-40px' }}
                 transition={{ duration: 0.45, delay: idx * 0.1 }}
                 whileHover={{ y: -5 }}
-                className="group rounded-3xl border border-[#E5E9F0] bg-white p-5 shadow-2xs hover:border-[#2563EB]/40 hover:shadow-lg transition-all flex flex-col justify-between"
+                className="group rounded-3xl border border-[#E5E9F0] bg-white p-5 sm:p-6 shadow-2xs hover:border-[#2563EB]/40 hover:shadow-xl hover:shadow-blue-500/10 transition-all flex flex-col justify-between text-left"
               >
                 <div>
+                  {/* Thumbnail box */}
                   <div
                     onClick={() => setActiveVideo(video)}
-                    className="relative aspect-video w-full rounded-2xl bg-[#151922] flex items-center justify-center cursor-pointer group hover:ring-2 hover:ring-[#2563EB]/40 transition-all overflow-hidden"
+                    className="relative aspect-[4/5] w-full rounded-2xl overflow-hidden cursor-pointer group/thumb shadow-xs mb-4 bg-slate-900"
                   >
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-[#2563EB] shadow-md group-hover:scale-115 transition-transform">
-                      <Play className="h-4 w-4 fill-[#2563EB] ml-0.5" />
+                    {video.thumbnailUrl ? (
+                      <img
+                        src={video.thumbnailUrl}
+                        alt={`${video.studentNameOrCode} review`}
+                        className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-500 group-hover/thumb:scale-105"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 bg-[#151922]" />
+                    )}
+
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/40 pointer-events-none" />
+
+                    <div className="relative z-10 p-3 flex items-center justify-between text-white text-[11px] font-semibold">
+                      <span className="rounded-md bg-black/60 px-2 py-0.5 backdrop-blur-md font-mono text-[10px] border border-white/10">
+                        {video.duration}
+                      </span>
+                      {video.roleBadge && (
+                        <span className="rounded-md bg-[#2563EB] px-2.5 py-0.5 text-[10px] font-bold shadow-xs">
+                          {video.roleBadge}
+                        </span>
+                      )}
                     </div>
-                    <span className="absolute bottom-2.5 right-2.5 rounded-full bg-black/80 px-2 py-0.5 text-[10px] font-mono text-white">
-                      {video.duration}
-                    </span>
+
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setActiveVideo(video);
+                      }}
+                      className="absolute inset-0 m-auto flex h-14 w-14 items-center justify-center rounded-full bg-white/95 text-[#2563EB] shadow-2xl transition-all duration-300 group-hover/thumb:scale-115 group-hover/thumb:bg-white group-hover/thumb:ring-4 group-hover/thumb:ring-blue-500/40 cursor-pointer z-10"
+                      aria-label={`Play testimonial from ${video.studentNameOrCode}`}
+                    >
+                      <Play className="h-6 w-6 fill-current ml-0.5 text-[#2563EB]" />
+                    </button>
+
+                    <div className="relative z-10 p-3 mt-auto">
+                      <div className="text-white text-xs font-bold truncate drop-shadow-sm">
+                        {video.courseTitle}
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="mt-4">
-                    <span className="text-[10px] font-bold text-[#2563EB] uppercase tracking-wider">
-                      {video.courseTitle}
-                    </span>
-                    <h3 className="mt-1 text-base font-bold text-[#151922]">
-                      {video.studentNameOrCode}
-                    </h3>
-                    <p className="mt-2 text-xs text-[#626B78] italic line-clamp-2 leading-relaxed">
-                      {video.transcriptSnippet}
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-between gap-2">
+                      <h3 className="text-base font-bold text-[#151922] tracking-tight">
+                        {video.studentNameOrCode}
+                      </h3>
+                      {video.roleBadge && (
+                        <span className="text-[10px] font-bold text-blue-700 bg-blue-50 border border-blue-200/60 rounded-full px-2 py-0.5 shrink-0">
+                          {video.roleBadge}
+                        </span>
+                      )}
+                    </div>
+                    <span className="text-[11px] text-[#626B78] block">{video.batchOrYear}</span>
+
+                    <p className="text-xs text-[#626B78] italic line-clamp-3 leading-relaxed pt-1">
+                      "{video.transcriptSnippet}"
                     </p>
                   </div>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-[#E5E9F0] flex items-center justify-between text-xs text-[#626B78]">
-                  <span>{video.batchOrYear}</span>
+                <div className="mt-4 pt-3 border-t border-[#E5E9F0]">
                   <button
                     type="button"
                     onClick={() => setActiveVideo(video)}
-                    className="font-bold text-[#2563EB] hover:underline"
+                    className="w-full flex items-center justify-center gap-1.5 rounded-xl border border-[#E5E9F0] bg-[#F7F9FC] py-2.5 text-xs font-bold text-[#151922] hover:bg-[#2563EB] hover:text-white hover:border-[#2563EB] transition-all cursor-pointer shadow-2xs"
                   >
-                    Watch Preview
+                    <Play className="h-3.5 w-3.5 fill-current" />
+                    <span>Watch Video Story</span>
                   </button>
                 </div>
               </motion.div>
@@ -160,47 +214,81 @@ export const StudentSuccessPage: React.FC = () => {
             <div
               role="dialog"
               aria-modal="true"
-              className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs"
+              className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-sm overflow-y-auto"
             >
+              <div className="fixed inset-0" onClick={() => setActiveVideo(null)} aria-hidden="true" />
               <motion.div
                 initial={{ opacity: 0, scale: 0.94 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.94 }}
                 transition={{ type: 'spring', damping: 25, stiffness: 350 }}
-                className="relative w-full max-w-lg rounded-3xl border border-[#E5E9F0] bg-white p-6 shadow-2xl text-left"
+                className="relative z-10 w-full max-w-lg max-h-[92vh] flex flex-col rounded-3xl border border-slate-700/60 bg-[#0F172A] p-4 sm:p-6 shadow-2xl text-left overflow-y-auto text-white my-auto"
               >
-                <div className="flex items-start justify-between pb-3 border-b border-[#E5E9F0]">
+                {/* Header */}
+                <div className="flex items-start justify-between pb-3 border-b border-slate-800">
                   <div>
-                    <span className="text-xs font-bold text-[#2563EB]">{activeVideo.courseTitle}</span>
-                    <h3 className="text-base font-bold text-[#151922]">{activeVideo.studentNameOrCode}</h3>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-xs font-bold text-blue-400">{activeVideo.courseTitle}</span>
+                      {activeVideo.roleBadge && (
+                        <span className="text-[10px] font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded px-1.5 py-0.5">
+                          {activeVideo.roleBadge}
+                        </span>
+                      )}
+                    </div>
+                    <h3 className="text-lg font-bold text-white tracking-tight">{activeVideo.studentNameOrCode}</h3>
                   </div>
                   <button
                     type="button"
                     onClick={() => setActiveVideo(null)}
-                    className="rounded-lg p-1.5 text-[#626B78] hover:bg-[#F7F9FC] hover:text-[#151922]"
+                    className="rounded-xl p-1.5 text-slate-400 hover:bg-slate-800 hover:text-white transition-colors cursor-pointer"
+                    aria-label="Close video"
                   >
-                    <X className="h-4 w-4" />
+                    <X className="h-5 w-5" />
                   </button>
                 </div>
 
-                <div className="mt-4 aspect-video rounded-2xl bg-[#151922] flex flex-col items-center justify-center p-6 text-center text-white">
-                  <Play className="h-8 w-8 text-[#2563EB] mb-2" />
-                  <p className="text-xs font-bold">Video Player (Preview Simulation)</p>
-                  <span className="mt-2 text-[10px] font-mono text-zinc-400">Duration: {activeVideo.duration}</span>
+                {/* Real Video Player */}
+                <div className="mt-4 rounded-2xl bg-black overflow-hidden flex items-center justify-center shadow-inner">
+                  {activeVideo.videoUrl ? (
+                    <video
+                      key={activeVideo.id}
+                      src={activeVideo.videoUrl}
+                      poster={activeVideo.thumbnailUrl}
+                      controls
+                      autoPlay
+                      playsInline
+                      className="w-full max-h-[62vh] object-contain rounded-2xl"
+                    />
+                  ) : (
+                    <div className="aspect-video w-full flex flex-col items-center justify-center p-6 text-center text-white">
+                      <Play className="h-8 w-8 text-[#2563EB] mb-2 fill-current" />
+                      <p className="text-xs font-bold">Video Player</p>
+                      <span className="mt-2 text-[10px] font-mono text-zinc-400">Duration: {activeVideo.duration}</span>
+                    </div>
+                  )}
                 </div>
 
-                <div className="mt-4 rounded-xl border border-[#E5E9F0] bg-[#F7F9FC] p-3 text-xs text-[#151922]">
-                  <span className="font-bold block mb-1">Transcript Snippet:</span>
-                  <p className="italic text-[#626B78] text-[11px] leading-relaxed">{activeVideo.transcriptSnippet}</p>
+                {/* Transcript Snippet */}
+                <div className="mt-4 rounded-xl border border-slate-800 bg-slate-900/80 p-3 text-xs text-slate-200">
+                  <span className="font-bold text-slate-400 text-[10px] uppercase tracking-wider block mb-1">
+                    Alumni Reflection:
+                  </span>
+                  <p className="italic text-slate-300 text-xs leading-relaxed">
+                    "{activeVideo.transcriptSnippet}"
+                  </p>
                 </div>
 
-                <div className="mt-4 flex justify-end">
+                {/* Footer */}
+                <div className="mt-4 flex items-center justify-between pt-1">
+                  <span className="text-[11px] font-mono text-slate-400">
+                    Duration: {activeVideo.duration}
+                  </span>
                   <button
                     type="button"
                     onClick={() => setActiveVideo(null)}
-                    className="rounded-xl border border-[#E5E9F0] bg-white px-4 py-2 text-xs font-bold text-[#151922] hover:bg-[#F7F9FC]"
+                    className="rounded-xl bg-slate-800 px-4 py-2 text-xs font-bold text-white hover:bg-slate-700 transition-colors cursor-pointer"
                   >
-                    Close Preview
+                    Close
                   </button>
                 </div>
               </motion.div>

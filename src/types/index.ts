@@ -120,13 +120,15 @@ export interface VideoTestimonial {
   duration: string;
   thumbnailUrl: string;
   transcriptSnippet: string;
+  videoUrl?: string;
+  roleBadge?: string;
   videoPlaceholderUrl?: string;
   isPlaceholder: boolean;
 }
 
 export interface FAQItem {
   id: string;
-  category: 'General' | 'Courses' | 'Prerequisites' | 'Learning Methodology' | 'Enquiries';
+  category: 'General' | 'Courses' | 'Prerequisites' | 'Learning Methodology' | 'Enquiries' | 'Chennai Academy' | 'DevOps Training' | 'Placement & Career';
   question: string;
   answer: string;
 }

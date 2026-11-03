@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { COURSES } from '../../data/coursesData';
 import { ArrowUpRight, ShieldCheck, FileText } from 'lucide-react';
 import { useEnquiry } from '../../context/EnquiryContext';
+import { BrandLogo } from '../common/BrandLogo';
 
 export const Footer: React.FC = () => {
   const { openEnquiryModal } = useEnquiry();
@@ -21,7 +22,7 @@ export const Footer: React.FC = () => {
     }
     const element = document.getElementById(id);
     if (element) {
-      const navOffset = 96;
+      const navOffset = 70;
       const elementPosition = element.getBoundingClientRect().top + window.scrollY;
       window.scrollTo({ top: elementPosition - navOffset, behavior: 'smooth' });
       window.history.pushState(null, '', `#${id}`);
@@ -40,15 +41,15 @@ export const Footer: React.FC = () => {
               className="inline-block cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#2563EB] rounded-md"
               aria-label="6F School of IT Homepage"
             >
-              <img
-                src="/1-no-bg.svg"
-                alt="6F School of IT"
-                className="h-16 sm:h-20 lg:h-24 w-auto max-w-[240px] object-contain"
-              />
+              <BrandLogo variant="footer" />
             </a>
             <p className="text-xs text-[#626B78] leading-relaxed max-w-sm">
-              Hands-on, project-based technology training in AI-Powered AWS DevOps, Azure DevOps, and AIOps.
+              6F School of IT is the best IT training institute in Chennai for practical, lab-first engineering in AI-Powered AWS DevOps, Azure DevOps, and AIOps.
             </p>
+            <div className="text-[11px] text-[#626B78] space-y-0.5 pt-1">
+              <p className="font-semibold text-[#151922]">📍 Chennai Campus & Global Online Labs</p>
+              <p>Chennai, Tamil Nadu, India • admissions@6fitschool.com</p>
+            </div>
           </div>
 
           {/* Programs */}
@@ -175,8 +176,8 @@ export const Footer: React.FC = () => {
         {/* Bottom Bar */}
         <div className="mt-8 border-t border-[#E5E9F0] pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-[#626B78]">
           <p>© {new Date().getFullYear()} 6F School of IT. All rights reserved.</p>
-          <p className="text-[#626B78]/80 font-mono">
-            Practical Engineering Academy | Single Page Architecture
+          <p className="text-[#626B78]/80 font-mono text-center sm:text-right">
+            Best IT Training Institute & DevOps Courses in Chennai | Practical Engineering Academy
           </p>
         </div>
       </div>
