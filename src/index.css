@@ -27,6 +27,14 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
+  /* When any modal or popup is open, lock root viewport and background scroll completely */
+  html.modal-open,
+  body.modal-open {
+    overflow: hidden !important;
+    overflow-y: hidden !important;
+    overscroll-behavior: none !important;
+  }
+
   code, pre, kbd {
     font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   }

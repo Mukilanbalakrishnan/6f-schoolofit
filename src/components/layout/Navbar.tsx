@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useEnquiry } from '../../context/EnquiryContext';
+import { useScrollLock } from '../../hooks/useScrollLock';
 import { Menu, X, ArrowUpRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { BrandLogo } from '../common/BrandLogo';
@@ -22,17 +23,8 @@ export const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Lock body scroll when mobile menu is open
-  useEffect(() => {
-    if (mobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [mobileMenuOpen]);
+  // Lock background scroll when mobile menu is open
+  useScrollLock(mobileMenuOpen);
 
   // Smooth scroll helper
   const scrollToTarget = useCallback((id: string) => {
@@ -108,7 +100,8 @@ export const Navbar: React.FC = () => {
   }, [location.hash, location.pathname, scrollToTarget]);
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-[#E5E9F0] bg-white/95 backdrop-blur-md">
+    <>
+      <header className="fixed top-0 left-0 right-0 z-40 w-full border-b border-[#E5E9F0] bg-white/95 backdrop-blur-md shadow-2xs transition-all">
       <div className="mx-auto flex h-14 sm:h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Brand Logo - Scrolls to Top */}
         <a
@@ -215,5 +208,8 @@ export const Navbar: React.FC = () => {
         )}
       </AnimatePresence>
     </header>
+    {/* Layout spacer for fixed header so content is not obscured */}
+    <div className="h-14 sm:h-16 w-full shrink-0 pointer-events-none" aria-hidden="true" />
+  </>
   );
 };

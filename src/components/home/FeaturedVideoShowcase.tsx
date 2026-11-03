@@ -20,7 +20,7 @@ export const FeaturedVideoShowcase: React.FC = () => {
   const { openEnquiryModal } = useEnquiry();
 
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
+  const [isMuted, setIsMuted] = useState(false);
   const [isHighlighted, setIsHighlighted] = useState(false);
   const [progress, setProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
@@ -29,41 +29,81 @@ export const FeaturedVideoShowcase: React.FC = () => {
   const [controlsVisible, setControlsVisible] = useState(true);
   const controlsTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Autoplay and highlight when scrolled into view
+  // Autoplay with audio on entry, and automatically stop audio when leaving section
   useEffect(() => {
     const video = videoRef.current;
     const target = containerRef.current;
     if (!video || !target) return;
 
+    let inView = false;
+
+    // Helper to attempt unmuted audio playback
+    const playWithAudio = () => {
+      if (!inView || !video) return;
+      video.muted = false;
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            setIsPlaying(true);
+            setIsMuted(false);
+          })
+          .catch(() => {
+            // If browser requires user interaction before unmuting, start muted and unmute on gesture
+            video.muted = true;
+            setIsMuted(true);
+            video
+              .play()
+              .then(() => setIsPlaying(true))
+              .catch(() => setIsPlaying(false));
+          });
+      }
+    };
+
+    // User gesture listener to automatically unmute if browser initially blocked unmuted autoplay
+    const handleUserGesture = () => {
+      if (inView && video && video.muted) {
+        video.muted = false;
+        setIsMuted(false);
+      }
+    };
+
+    window.addEventListener('click', handleUserGesture, { passive: true });
+    window.addEventListener('scroll', handleUserGesture, { passive: true });
+    window.addEventListener('touchstart', handleUserGesture, { passive: true });
+    window.addEventListener('pointerdown', handleUserGesture, { passive: true });
+
     const observer = new IntersectionObserver(
       (entries) => {
         const [entry] = entries;
         if (entry.isIntersecting) {
+          inView = true;
           setIsHighlighted(true);
-          video.muted = true; // Required by browsers for autoplay
-          setIsMuted(true);
-          const playPromise = video.play();
-          if (playPromise !== undefined) {
-            playPromise
-              .then(() => setIsPlaying(true))
-              .catch(() => {
-                // Autoplay prevented, user can click to play
-                setIsPlaying(false);
-              });
-          }
+          // Play video with audio as soon as section is entered
+          playWithAudio();
         } else {
+          inView = false;
           setIsHighlighted(false);
+          // Automatically turn off audio and pause video when leaving section
           video.pause();
+          video.muted = true;
+          setIsMuted(true);
           setIsPlaying(false);
         }
       },
       {
-        threshold: 0.35, // Trigger when 35% visible
+        threshold: 0.3, // Trigger when 30% visible
       }
     );
 
     observer.observe(target);
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('click', handleUserGesture);
+      window.removeEventListener('scroll', handleUserGesture);
+      window.removeEventListener('touchstart', handleUserGesture);
+      window.removeEventListener('pointerdown', handleUserGesture);
+    };
   }, []);
 
   // Listen for fullscreen changes

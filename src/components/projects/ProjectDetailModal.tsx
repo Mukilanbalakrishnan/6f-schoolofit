@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useEnquiry } from '../../context/EnquiryContext';
+import { useScrollLock } from '../../hooks/useScrollLock';
 
 interface ProjectDetailModalProps {
   project: StudentProject | null;
@@ -27,17 +28,19 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
 }) => {
   const { openEnquiryModal } = useEnquiry();
 
-  // Prevent background scrolling when project detail modal is open
+  // Close on Escape key press
   useEffect(() => {
-    if (project) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => {
-      document.body.style.overflow = 'unset';
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && project) {
+        onClose();
+      }
     };
-  }, [project]);
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [project, onClose]);
+
+  // Robust multi-browser background scroll lock
+  useScrollLock(Boolean(project));
 
   if (!project) return null;
 
@@ -52,7 +55,13 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
       <div
         role="dialog"
         aria-modal="true"
-        className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/65 backdrop-blur-sm overflow-y-auto"
+        className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/65 backdrop-blur-sm overflow-y-auto overscroll-contain"
+        onWheel={(e) => {
+          if (e.target === e.currentTarget) e.preventDefault();
+        }}
+        onTouchMove={(e) => {
+          if (e.target === e.currentTarget) e.preventDefault();
+        }}
       >
         <div className="fixed inset-0" onClick={onClose} aria-hidden="true" />
 
@@ -61,7 +70,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 16 }}
           transition={{ type: 'spring', damping: 26, stiffness: 360 }}
-          className="relative z-10 w-full max-w-2xl rounded-3xl border border-[#E5E9F0] bg-white shadow-2xl overflow-hidden text-left my-8"
+          className="relative z-10 w-full max-w-2xl rounded-3xl border border-[#E5E9F0] bg-white shadow-2xl overflow-hidden text-left my-8 overscroll-contain"
         >
           {/* Header */}
           <div className="flex items-start justify-between p-6 sm:p-7 border-b border-[#E5E9F0] bg-[#F7F9FC]">
@@ -96,7 +105,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
           </div>
 
           {/* Modal Body */}
-          <div className="p-6 sm:p-7 space-y-6 max-h-[calc(85vh-180px)] overflow-y-auto">
+          <div className="p-6 sm:p-7 space-y-6 max-h-[calc(85vh-180px)] overflow-y-auto overscroll-contain">
             {/* Overview Paragraph */}
             <div>
               <span className="text-xs font-mono font-bold uppercase text-[#2563EB] tracking-wider block mb-1">

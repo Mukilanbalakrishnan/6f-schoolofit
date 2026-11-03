@@ -398,6 +398,19 @@ export const SUCCESS_STORIES: SuccessStory[] = [
 
 export const VIDEO_TESTIMONIALS: VideoTestimonial[] = [
   {
+    id: 'video-6',
+    studentNameOrCode: 'Vijay',
+    courseTitle: 'AI-Powered Azure DevOps',
+    batchOrYear: 'Alumni • Cloud & DevSecOps Leadership',
+    roleBadge: 'Lead DevOps',
+    duration: '4:06',
+    thumbnailUrl: '/review-video/thumbnails/testimonial-6.jpg',
+    videoUrl: 'https://ik.imagekit.io/rhnuhe0tc/review-video/tr:w-540,q-50/Pavan%20Testimonial%206.mp4',
+    transcriptSnippet:
+      'The curriculum structured across Linux, Cloud Foundations, Kubernetes, and AI-powered DevSecOps prepared me thoroughly. I transitioned into a Lead DevOps role with deep confidence in designing resilient multi-cloud architectures.',
+    isPlaceholder: false,
+  },
+  {
     id: 'video-1',
     studentNameOrCode: 'Metalda',
     courseTitle: 'AI-Powered AWS DevOps',
@@ -405,7 +418,7 @@ export const VIDEO_TESTIMONIALS: VideoTestimonial[] = [
     roleBadge: 'Lead DevOps',
     duration: '3:04',
     thumbnailUrl: '/review-video/thumbnails/testimonial-1.jpg',
-    videoUrl: '/review-video/Pavan%20Testimonial%201.mp4',
+    videoUrl: 'https://ik.imagekit.io/rhnuhe0tc/review-video/tr:w-540,q-50/Pavan%20Testimonial%201.mp4',
     transcriptSnippet:
       'The direct lab-first approach and architectural rigor at 6F School of IT completely redefined how I handle production cloud operations. Pavan\'s mentorship on CI/CD pipelines, Kubernetes orchestration, and troubleshooting real outages gave me the leadership edge.',
     isPlaceholder: false,
@@ -418,7 +431,7 @@ export const VIDEO_TESTIMONIALS: VideoTestimonial[] = [
     roleBadge: 'Lead DevOps',
     duration: '3:37',
     thumbnailUrl: '/review-video/thumbnails/testimonial-2.jpg',
-    videoUrl: '/review-video/Pavan%20Testimonial%202.mp4',
+    videoUrl: 'https://ik.imagekit.io/rhnuhe0tc/review-video/tr:w-540,q-50/Pavan%20Testimonial%202.mp4',
     transcriptSnippet:
       '6F School of IT doesn\'t just teach theory—we built enterprise grade Azure pipelines, AKS clusters, and infrastructure automation from scratch. The hands-on capstone projects gave me the practical mastery needed to excel as a Lead DevOps Engineer.',
     isPlaceholder: false,
@@ -431,7 +444,7 @@ export const VIDEO_TESTIMONIALS: VideoTestimonial[] = [
     roleBadge: 'Cloud Support Engineer',
     duration: '3:41',
     thumbnailUrl: '/review-video/thumbnails/testimonial-3.jpg',
-    videoUrl: '/review-video/Pavan%20Testimonial%203.mp4',
+    videoUrl: 'https://ik.imagekit.io/rhnuhe0tc/review-video/tr:w-540,q-50/Pavan%20Testimonial%203.mp4',
     transcriptSnippet:
       'Coming from a learning curve to clearing interviews as a Cloud Support Engineer was possible because of the step-by-step guidance. VPC subnets, IAM policies, and Linux administration troubleshooting became second nature through daily practice.',
     isPlaceholder: false,
@@ -444,7 +457,7 @@ export const VIDEO_TESTIMONIALS: VideoTestimonial[] = [
     roleBadge: 'Senior DevOps',
     duration: '5:05',
     thumbnailUrl: '/review-video/thumbnails/testimonial-4.jpg',
-    videoUrl: '/review-video/Pavan%20Testimonial%204.mp4',
+    videoUrl: 'https://ik.imagekit.io/rhnuhe0tc/review-video/tr:w-540,q-50/Pavan%20Testimonial%204.mp4',
     transcriptSnippet:
       'The in-depth coverage of Docker, Kubernetes, Terraform IaC, and production deployment strategies made all the difference. When interviewers asked about high availability architectures and rollback mechanisms, I answered from real lab experience.',
     isPlaceholder: false,
@@ -457,22 +470,9 @@ export const VIDEO_TESTIMONIALS: VideoTestimonial[] = [
     roleBadge: 'Senior DevOps',
     duration: '4:38',
     thumbnailUrl: '/review-video/thumbnails/testimonial-5.jpg',
-    videoUrl: '/review-video/Pavan%20Testimonial%205.mp4',
+    videoUrl: 'https://ik.imagekit.io/rhnuhe0tc/review-video/tr:w-540,q-50/Pavan%20Testimonial%205.mp4',
     transcriptSnippet:
       'Pavan anna\'s mentorship went far beyond standard tutorials. We debugged real pipeline failures, optimized containerized microservices, and automated monitoring. That real-time problem-solving mindset landed me my Senior DevOps offer.',
-    isPlaceholder: false,
-  },
-  {
-    id: 'video-6',
-    studentNameOrCode: 'Vijay',
-    courseTitle: 'AI-Powered Azure DevOps',
-    batchOrYear: 'Alumni • Cloud & DevSecOps Leadership',
-    roleBadge: 'Lead DevOps',
-    duration: '4:06',
-    thumbnailUrl: '/review-video/thumbnails/testimonial-6.jpg',
-    videoUrl: '/review-video/Pavan%20Testimonial%206.mp4',
-    transcriptSnippet:
-      'The curriculum structured across Linux, Cloud Foundations, Kubernetes, and AI-powered DevSecOps prepared me thoroughly. I transitioned into a Lead DevOps role with deep confidence in designing resilient multi-cloud architectures.',
     isPlaceholder: false,
   },
 ];

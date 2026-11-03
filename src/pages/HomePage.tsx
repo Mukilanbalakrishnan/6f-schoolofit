@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useEnquiry } from '../context/EnquiryContext';
+import { useScrollLock } from '../hooks/useScrollLock';
 import { COURSES } from '../data/coursesData';
 import { STUDENT_PROJECTS } from '../data/projectsData';
 import { VIDEO_TESTIMONIALS, ALL_WHATSAPP_REVIEWS } from '../data/storiesData';
@@ -11,9 +12,9 @@ import { EnquiryForm } from '../components/enquiry/EnquiryForm';
 import { TechnologyCarousel } from '../components/technologies/TechnologyCarousel';
 import { FlightPathJourney } from '../components/home/FlightPathJourney';
 import { WhyChooseUsRoadmap } from '../components/home/WhyChooseUsRoadmap';
-import { FeaturedVideoShowcase } from '../components/home/FeaturedVideoShowcase';
 import { ProjectCard } from '../components/projects/ProjectCard';
 import { ProjectDetailModal } from '../components/projects/ProjectDetailModal';
+import { ModalVideoPlayer } from '../components/common/ModalVideoPlayer';
 import { SectionMarginSketches } from '../components/common/SectionMarginSketches';
 import {
   ArrowRight,
@@ -120,17 +121,8 @@ export const HomePage: React.FC = () => {
   const [activeScreenshotIndex, setActiveScreenshotIndex] = useState<number | null>(null);
   const activeScreenshot = activeScreenshotIndex !== null ? ALL_WHATSAPP_REVIEWS[activeScreenshotIndex] : null;
 
-  // Prevent background scrolling when popups (video modal or screenshot lightbox) are open
-  useEffect(() => {
-    if (activeVideo || activeScreenshotIndex !== null) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [activeVideo, activeScreenshotIndex]);
+  // Robust multi-browser background scroll lock when popups (video modal or screenshot lightbox) are open
+  useScrollLock(Boolean(activeVideo || activeScreenshotIndex !== null));
 
   // Responsive visible cards count
   React.useEffect(() => {
@@ -221,6 +213,19 @@ export const HomePage: React.FC = () => {
 
   const renderVideoCard = (video: VideoTestimonial, isMobileSlide = false) => (
     <div
+      onMouseEnter={() => {
+        // Pre-fetch video data on hover so it plays instantly when clicked
+        if (video.videoUrl && typeof document !== 'undefined') {
+          const id = `prefetch-${video.id}`;
+          if (!document.getElementById(id)) {
+            const link = document.createElement('link');
+            link.id = id;
+            link.rel = 'prefetch';
+            link.href = video.videoUrl;
+            document.head.appendChild(link);
+          }
+        }
+      }}
       className={`group rounded-3xl border border-[#E5E9F0] bg-white p-5 sm:p-6 shadow-2xs hover:border-[#2563EB]/40 hover:shadow-xl hover:shadow-blue-500/10 transition-all flex flex-col justify-between text-left h-full ${
         isMobileSlide ? 'w-full max-w-sm mx-auto' : ''
       }`}
@@ -319,8 +324,8 @@ export const HomePage: React.FC = () => {
         id="home"
         className="relative border-b border-[#E5E9F0] pt-14 pb-18 lg:pt-20 lg:pb-24 overflow-hidden text-center"
       >
-        {/* Background Video (Futuristic AI Cloud Infrastructure - Clean & Full Opacity) */}
-        <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+        {/* Background Video with Black Color Transparent Screen Overlay */}
+        <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden bg-black">
           <video
             autoPlay
             loop
@@ -328,10 +333,12 @@ export const HomePage: React.FC = () => {
             playsInline
             preload="auto"
             poster="/hero-video-poster.jpg"
-            className="w-full h-full object-cover object-center"
+            className="w-full h-full object-cover object-center opacity-70"
           >
             <source src="/hero-video.mp4" type="video/mp4" />
           </video>
+          {/* Black color transparent screen overlay for crisp text readability */}
+          <div className="absolute inset-0 bg-black/60" />
         </div>
 
 
@@ -564,10 +571,6 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* =========================================================================
-          FEATURED VIDEO SHOWCASE (Pavan • Founder & CEO Keynote)
-         ========================================================================= */}
-      <FeaturedVideoShowcase />
 
       {/* =========================================================================
           3. WHY CHOOSE 6F SCHOOL OF IT (#why-us)
@@ -1319,7 +1322,13 @@ export const HomePage: React.FC = () => {
           <div
             role="dialog"
             aria-modal="true"
-            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-sm overflow-y-auto"
+            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-sm overflow-y-auto overscroll-contain"
+            onWheel={(e) => {
+              if (e.target === e.currentTarget) e.preventDefault();
+            }}
+            onTouchMove={(e) => {
+              if (e.target === e.currentTarget) e.preventDefault();
+            }}
           >
             <div className="fixed inset-0" onClick={() => setActiveVideo(null)} aria-hidden="true" />
             <motion.div
@@ -1353,19 +1362,16 @@ export const HomePage: React.FC = () => {
               </div>
 
               {/* Real Video Player */}
-              <div className="mt-4 rounded-2xl bg-black overflow-hidden flex items-center justify-center shadow-inner">
+              <div className="mt-4">
                 {activeVideo.videoUrl ? (
-                  <video
+                  <ModalVideoPlayer
                     key={activeVideo.id}
-                    src={activeVideo.videoUrl}
-                    poster={activeVideo.thumbnailUrl}
-                    controls
-                    autoPlay
-                    playsInline
-                    className="w-full max-h-[62vh] object-contain rounded-2xl"
+                    videoUrl={activeVideo.videoUrl}
+                    posterUrl={activeVideo.thumbnailUrl}
+                    title={activeVideo.studentNameOrCode}
                   />
                 ) : (
-                  <div className="aspect-video w-full flex flex-col items-center justify-center p-6 text-center text-white">
+                  <div className="aspect-video w-full rounded-2xl bg-black flex flex-col items-center justify-center p-6 text-center text-white">
                     <Play className="h-8 w-8 text-[#2563EB] mb-2 fill-current" />
                     <p className="text-xs font-bold">Video Player</p>
                     <span className="mt-2 text-[10px] font-mono text-zinc-400">Duration: {activeVideo.duration}</span>
@@ -1407,7 +1413,13 @@ export const HomePage: React.FC = () => {
           <div
             role="dialog"
             aria-modal="true"
-            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-sm overflow-y-auto"
+            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-sm overflow-y-auto overscroll-contain"
+            onWheel={(e) => {
+              if (e.target === e.currentTarget) e.preventDefault();
+            }}
+            onTouchMove={(e) => {
+              if (e.target === e.currentTarget) e.preventDefault();
+            }}
           >
             <div className="fixed inset-0" onClick={() => setActiveScreenshotIndex(null)} aria-hidden="true" />
             <motion.div

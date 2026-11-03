@@ -1,26 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { SUCCESS_STORIES, VIDEO_TESTIMONIALS } from '../data/storiesData';
 import type { VideoTestimonial } from '../types';
 import { useEnquiry } from '../context/EnquiryContext';
+import { useScrollLock } from '../hooks/useScrollLock';
 import { Play, X, FolderGit2, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { ModalVideoPlayer } from '../components/common/ModalVideoPlayer';
 
 export const StudentSuccessPage: React.FC = () => {
   const [activeVideo, setActiveVideo] = useState<VideoTestimonial | null>(null);
   const { openEnquiryModal } = useEnquiry();
 
-  // Prevent background scrolling when video modal is open
-  useEffect(() => {
-    if (activeVideo) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [activeVideo]);
+  // Robust multi-browser background scroll lock when video modal is open
+  useScrollLock(Boolean(activeVideo));
 
   return (
     <div className="w-full bg-white text-[#151922] py-12 lg:py-16 text-left">
@@ -214,7 +207,13 @@ export const StudentSuccessPage: React.FC = () => {
             <div
               role="dialog"
               aria-modal="true"
-              className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-sm overflow-y-auto"
+              className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-sm overflow-y-auto overscroll-contain"
+              onWheel={(e) => {
+                if (e.target === e.currentTarget) e.preventDefault();
+              }}
+              onTouchMove={(e) => {
+                if (e.target === e.currentTarget) e.preventDefault();
+              }}
             >
               <div className="fixed inset-0" onClick={() => setActiveVideo(null)} aria-hidden="true" />
               <motion.div
@@ -248,19 +247,16 @@ export const StudentSuccessPage: React.FC = () => {
                 </div>
 
                 {/* Real Video Player */}
-                <div className="mt-4 rounded-2xl bg-black overflow-hidden flex items-center justify-center shadow-inner">
+                <div className="mt-4">
                   {activeVideo.videoUrl ? (
-                    <video
+                    <ModalVideoPlayer
                       key={activeVideo.id}
-                      src={activeVideo.videoUrl}
-                      poster={activeVideo.thumbnailUrl}
-                      controls
-                      autoPlay
-                      playsInline
-                      className="w-full max-h-[62vh] object-contain rounded-2xl"
+                      videoUrl={activeVideo.videoUrl}
+                      posterUrl={activeVideo.thumbnailUrl}
+                      title={activeVideo.studentNameOrCode}
                     />
                   ) : (
-                    <div className="aspect-video w-full flex flex-col items-center justify-center p-6 text-center text-white">
+                    <div className="aspect-video w-full rounded-2xl bg-black flex flex-col items-center justify-center p-6 text-center text-white">
                       <Play className="h-8 w-8 text-[#2563EB] mb-2 fill-current" />
                       <p className="text-xs font-bold">Video Player</p>
                       <span className="mt-2 text-[10px] font-mono text-zinc-400">Duration: {activeVideo.duration}</span>

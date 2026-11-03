@@ -14,11 +14,13 @@ import {
   BookOpen,
   Calendar,
   MessageSquare,
+  ArrowRight,
 } from 'lucide-react';
 
 interface EnquiryFormProps {
   initialCourse?: string;
   onSuccess?: () => void;
+  onCancel?: () => void;
   compact?: boolean;
 }
 
@@ -40,6 +42,7 @@ export const STATUS_OPTIONS = [
 export const EnquiryForm: React.FC<EnquiryFormProps> = ({
   initialCourse = '',
   onSuccess,
+  onCancel,
   compact = false,
 }) => {
   const [formData, setFormData] = useState<EnquiryFormData>({
@@ -241,13 +244,25 @@ export const EnquiryForm: React.FC<EnquiryFormProps> = ({
                 </div>
               )}
 
-              <button
-                type="button"
-                onClick={() => setSubmitStatus('idle')}
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-800 underline underline-offset-4 hover:text-emerald-950 cursor-pointer"
-              >
-                <span>Submit another enquiry</span>
-              </button>
+              <div className="flex items-center gap-4 pt-1">
+                <button
+                  type="button"
+                  onClick={() => setSubmitStatus('idle')}
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-800 underline underline-offset-4 hover:text-emerald-950 cursor-pointer"
+                >
+                  <span>Submit another enquiry</span>
+                </button>
+                {onCancel && (
+                  <button
+                    type="button"
+                    onClick={onCancel}
+                    className="inline-flex items-center gap-1 text-xs font-bold text-emerald-800 hover:text-emerald-950 cursor-pointer"
+                  >
+                    <span>Continue to Website</span>
+                    <ArrowRight className="h-3 w-3" />
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -263,7 +278,7 @@ export const EnquiryForm: React.FC<EnquiryFormProps> = ({
             </div>
           )}
 
-          {/* Section 1: Name and Email */}
+          {/* Section 1: Name and Email (2 columns) */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
             <div>
               <label htmlFor="fullName" className="flex items-center gap-1.5 text-xs font-semibold text-[#151922] mb-1">
@@ -306,7 +321,7 @@ export const EnquiryForm: React.FC<EnquiryFormProps> = ({
             </div>
           </div>
 
-          {/* Section 2: Phone Number & Location */}
+          {/* Section 2: Phone Number & Location (2 columns) */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
             <div>
               <label htmlFor="phoneNumber" className="flex items-center gap-1.5 text-xs font-semibold text-[#151922] mb-1">
@@ -351,79 +366,80 @@ export const EnquiryForm: React.FC<EnquiryFormProps> = ({
             </div>
           </div>
 
-          {/* Section 3: Course Interested In */}
-          <div>
-            <label htmlFor="courseInterestedIn" className="flex items-center gap-1.5 text-xs font-semibold text-[#151922] mb-1">
-              <BookOpen className="h-3.5 w-3.5 text-[#2563EB]" />
-              <span>Program Interested In</span>
-              <span className="text-[#2563EB]">*</span>
-            </label>
-            <select
-              id="courseInterestedIn"
-              name="courseInterestedIn"
-              value={formData.courseInterestedIn}
-              onChange={handleChange}
-              className={`w-full rounded-xl border bg-white px-3.5 py-2.5 text-xs text-[#151922] focus:outline-none focus:ring-2 focus:ring-[#2563EB]/20 transition-all ${
-                errors.courseInterestedIn ? 'border-red-500' : 'border-[#E5E9F0] focus:border-[#2563EB]'
-              }`}
-            >
-              <option value="">Select a flagship program</option>
-              {COURSES.map((course) => (
-                <option key={course.id} value={course.title}>
-                  {course.title}
-                </option>
-              ))}
-            </select>
-            {errors.courseInterestedIn && (
-              <p className="mt-1 text-[11px] text-red-600">{errors.courseInterestedIn}</p>
-            )}
-          </div>
-
-          {/* Section 4: Age Category */}
-          <div>
-            <div className="flex items-center justify-between mb-1.5">
-              <label className="flex items-center gap-1.5 text-xs font-semibold text-[#151922]">
-                <Calendar className="h-3.5 w-3.5 text-[#2563EB]" />
-                <span>Age Category</span>
+          {/* Section 3 & 4: Program Interested In & Age Category (Side-by-side in wide view) */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3.5">
+            <div>
+              <label htmlFor="courseInterestedIn" className="flex items-center gap-1.5 text-xs font-semibold text-[#151922] mb-1">
+                <BookOpen className="h-3.5 w-3.5 text-[#2563EB]" />
+                <span>Program Interested In</span>
                 <span className="text-[#2563EB]">*</span>
               </label>
-              {formData.ageCategory && (
-                <span className="text-[10px] font-bold text-[#2563EB] bg-blue-50 px-2 py-0.5 rounded-md">
-                  Selected: {formData.ageCategory}
-                </span>
+              <select
+                id="courseInterestedIn"
+                name="courseInterestedIn"
+                value={formData.courseInterestedIn}
+                onChange={handleChange}
+                className={`w-full rounded-xl border bg-white px-3.5 py-2.5 text-xs text-[#151922] focus:outline-none focus:ring-2 focus:ring-[#2563EB]/20 transition-all ${
+                  errors.courseInterestedIn ? 'border-red-500' : 'border-[#E5E9F0] focus:border-[#2563EB]'
+                }`}
+              >
+                <option value="">Select a flagship program</option>
+                {COURSES.map((course) => (
+                  <option key={course.id} value={course.title}>
+                    {course.title}
+                  </option>
+                ))}
+              </select>
+              {errors.courseInterestedIn && (
+                <p className="mt-1 text-[11px] text-red-600">{errors.courseInterestedIn}</p>
               )}
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-              {AGE_CATEGORIES.map((category) => {
-                const isSelected = formData.ageCategory === category;
-                return (
-                  <button
-                    key={category}
-                    type="button"
-                    onClick={() => handleAgeSelect(category)}
-                    className={`flex items-center justify-center gap-2 rounded-xl border py-2.5 px-3 text-xs font-bold transition-all cursor-pointer ${
-                      isSelected
-                        ? 'border-[#2563EB] bg-[#2563EB]/10 text-[#2563EB] shadow-xs'
-                        : 'border-[#E5E9F0] bg-white text-[#626B78] hover:border-slate-300 hover:text-[#151922] hover:bg-[#F7F9FC]'
-                    }`}
-                  >
-                    <span
-                      className={`h-2 w-2 rounded-full transition-colors ${
-                        isSelected ? 'bg-[#2563EB]' : 'bg-slate-300'
+            <div>
+              <div className="flex items-center justify-between mb-1">
+                <label className="flex items-center gap-1.5 text-xs font-semibold text-[#151922]">
+                  <Calendar className="h-3.5 w-3.5 text-[#2563EB]" />
+                  <span>Age Category</span>
+                  <span className="text-[#2563EB]">*</span>
+                </label>
+                {formData.ageCategory && (
+                  <span className="text-[10px] font-bold text-[#2563EB] bg-blue-50 px-2 py-0.5 rounded-md">
+                    {formData.ageCategory}
+                  </span>
+                )}
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+                {AGE_CATEGORIES.map((category) => {
+                  const isSelected = formData.ageCategory === category;
+                  return (
+                    <button
+                      key={category}
+                      type="button"
+                      onClick={() => handleAgeSelect(category)}
+                      className={`flex items-center justify-center gap-1.5 rounded-xl border py-2 px-2 text-xs font-bold transition-all cursor-pointer ${
+                        isSelected
+                          ? 'border-[#2563EB] bg-[#2563EB]/10 text-[#2563EB] shadow-xs'
+                          : 'border-[#E5E9F0] bg-white text-[#626B78] hover:border-slate-300 hover:text-[#151922] hover:bg-[#F7F9FC]'
                       }`}
-                    />
-                    <span>{category}</span>
-                  </button>
-                );
-              })}
+                    >
+                      <span
+                        className={`h-1.5 w-1.5 rounded-full transition-colors ${
+                          isSelected ? 'bg-[#2563EB]' : 'bg-slate-300'
+                        }`}
+                      />
+                      <span>{category}</span>
+                    </button>
+                  );
+                })}
+              </div>
+              {errors.ageCategory && (
+                <p className="mt-1 text-[11px] text-red-600">{errors.ageCategory}</p>
+              )}
             </div>
-            {errors.ageCategory && (
-              <p className="mt-1 text-[11px] text-red-600">{errors.ageCategory}</p>
-            )}
           </div>
 
-          {/* Section 5: Current Professional Status (Exact matching specification & screenshot) */}
+          {/* Section 5: Current Professional Status (Optimized 3 columns in wide view) */}
           <div>
             <div className="flex items-center justify-between mb-1.5">
               <label className="flex items-center gap-1.5 text-xs font-semibold text-[#151922]">
@@ -434,14 +450,14 @@ export const EnquiryForm: React.FC<EnquiryFormProps> = ({
             </div>
 
             <div className="space-y-2">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
                 {STATUS_OPTIONS.map((status) => {
                   const isSelected = formData.currentStatus === status;
                   return (
                     <label
                       key={status}
                       onClick={() => handleStatusSelect(status)}
-                      className={`flex items-center gap-2.5 rounded-xl border p-2.5 text-xs cursor-pointer transition-all ${
+                      className={`flex items-center gap-2 rounded-xl border p-2.5 text-xs cursor-pointer transition-all ${
                         isSelected
                           ? 'border-[#2563EB] bg-blue-50/60 text-[#151922] shadow-2xs font-semibold'
                           : 'border-[#E5E9F0] bg-white text-[#626B78] hover:border-slate-300 hover:bg-[#F7F9FC]'
@@ -505,27 +521,41 @@ export const EnquiryForm: React.FC<EnquiryFormProps> = ({
             />
           </div>
 
-          {/* Submit Button */}
+          {/* Submit Actions */}
           <div className="pt-2">
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#2563EB] px-6 py-3 text-xs sm:text-sm font-bold text-white shadow-md shadow-blue-500/15 hover:bg-[#1D4ED8] transition-all disabled:opacity-70 focus:outline-none focus:ring-2 focus:ring-[#2563EB]/20 cursor-pointer"
-            >
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  <span>Submitting Enquiry...</span>
-                </>
-              ) : (
-                <>
-                  <span>Submit Course Enquiry</span>
-                  <Send className="h-3.5 w-3.5" />
-                </>
+            <div className="flex flex-col sm:flex-row items-center gap-3">
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="inline-flex flex-1 w-full items-center justify-center gap-2 rounded-xl bg-[#2563EB] px-6 py-3 text-xs sm:text-sm font-bold text-white shadow-md shadow-blue-500/15 hover:bg-[#1D4ED8] transition-all disabled:opacity-70 focus:outline-none focus:ring-2 focus:ring-[#2563EB]/20 cursor-pointer"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <span>Submitting Enquiry...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>Submit Course Enquiry</span>
+                    <Send className="h-3.5 w-3.5" />
+                  </>
+                )}
+              </button>
+
+              {onCancel && (
+                <button
+                  type="button"
+                  onClick={onCancel}
+                  className="inline-flex w-full sm:w-auto items-center justify-center gap-1.5 rounded-xl border border-[#E5E9F0] bg-white px-5 py-3 text-xs sm:text-sm font-bold text-[#626B78] hover:bg-[#F7F9FC] hover:text-[#151922] transition-all cursor-pointer"
+                  title="Close enquiry and view actual content"
+                >
+                  <span>Continue to Website</span>
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </button>
               )}
-            </button>
+            </div>
             <span className="mt-2 block text-center text-[10px] text-[#626B78]">
-              Free syllabus download & batch schedule details sent upon enquiry.
+              Free syllabus download & batch schedule details sent upon enquiry. Zero spam.
             </span>
           </div>
         </form>

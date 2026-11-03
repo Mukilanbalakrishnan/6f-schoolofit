@@ -33,7 +33,7 @@ export function App() {
     <BrowserRouter>
       <EnquiryProvider>
         <ScrollToTop />
-        <div className="flex min-h-screen w-full flex-col bg-white text-[#151922] antialiased selection:bg-[#2563EB]/15 selection:text-[#2563EB] overflow-x-hidden">
+        <div className="flex min-h-screen w-full flex-col bg-white text-[#151922] antialiased selection:bg-[#2563EB]/15 selection:text-[#2563EB]">
           {/* Sticky Header */}
           <Navbar />
 

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import type { Course } from '../../types';
 import { SyllabusAccordion } from './SyllabusAccordion';
 import { useEnquiry } from '../../context/EnquiryContext';
+import { useScrollLock } from '../../hooks/useScrollLock';
 import { X, Clock, Layers, CheckCircle2, ArrowUpRight, BookOpen, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -29,17 +30,8 @@ export const SyllabusModal: React.FC<SyllabusModalProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
-  // Lock body scroll when modal is open
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [isOpen]);
+  // Robust multi-browser background scroll lock
+  useScrollLock(isOpen);
 
   if (!course) return null;
 
@@ -50,7 +42,7 @@ export const SyllabusModal: React.FC<SyllabusModalProps> = ({
           role="dialog"
           aria-modal="true"
           aria-labelledby="syllabus-modal-title"
-          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/60 backdrop-blur-xs overflow-y-auto"
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/60 backdrop-blur-xs overflow-y-auto overscroll-contain" onWheel={(e) => { if (e.target === e.currentTarget) e.preventDefault(); }} onTouchMove={(e) => { if (e.target === e.currentTarget) e.preventDefault(); }}
         >
           {/* Backdrop Click */}
           <div className="fixed inset-0" onClick={onClose} aria-hidden="true" />
@@ -116,7 +108,7 @@ export const SyllabusModal: React.FC<SyllabusModalProps> = ({
             </div>
 
             {/* Scrollable Body with Syllabus Accordion */}
-            <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-6">
+            <div className="flex-1 overflow-y-auto overscroll-contain p-5 sm:p-6 space-y-6">
               {/* THADAM 75 Curriculum Journey & Learning Model Strip */}
               {course.trainingDays && (
                 <div className="rounded-2xl border border-blue-200 bg-gradient-to-r from-blue-50/70 via-indigo-50/50 to-emerald-50/50 p-4 text-xs space-y-3">
